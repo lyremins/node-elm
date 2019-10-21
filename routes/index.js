@@ -13,6 +13,7 @@ import statis from './statis'
 import member from './member'
 import shopping from './shopping'
 import promotion from './promotion'
+import wcbz from './wcbz'
 
 export default app => {
 	// app.get('/', (req, res, next) => {
@@ -31,4 +32,5 @@ export default app => {
 	app.use('/statis', statis);
 	app.use('/shopping', shopping);
 	app.use('/promotion', promotion);
+	app.use('/wcbz', wcbz);
 }

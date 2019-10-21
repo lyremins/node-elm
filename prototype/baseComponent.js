@@ -11,7 +11,7 @@ qiniu.conf.SECRET_KEY = 'XNIW2dNffPBdaAhvm9dadBlJ-H6yyCTIJLxNM_N6';
 
 export default class BaseComponent {
 	constructor(){
-		this.idList = ['restaurant_id', 'food_id', 'order_id', 'user_id', 'address_id', 'cart_id', 'img_id', 'category_id', 'item_id', 'sku_id', 'admin_id', 'statis_id'];
+		this.idList = ['organiz_id','plan_id','subject_id','vehicle_id','device_id','ensure_id','equip_id','airplane_id','person_id','restaurant_id', 'food_id', 'order_id', 'user_id', 'address_id', 'cart_id', 'img_id', 'category_id', 'item_id', 'sku_id', 'admin_id', 'statis_id'];
 		this.imgTypeList = ['shop', 'food', 'avatar','default'];
 		this.uploadImg = this.uploadImg.bind(this)
 		this.qiniu = this.qiniu.bind(this)
@@ -66,7 +66,8 @@ export default class BaseComponent {
 			return
 		}
 		try{
-			const idData = await Ids.findOne();
+            const idData = await Ids.findOne();
+            console.log(idData);
 			idData[type] ++ ;
 			await idData.save();
 			return idData[type]
@@ -118,7 +119,7 @@ export default class BaseComponent {
 						message: '文件格式错误'
 					})
 					reject('上传失败');
-					return 
+					return
 				}
 				const fullName = hashName + extname;
 				const repath = './public/img/' + fullName;
@@ -187,7 +188,7 @@ export default class BaseComponent {
 		return new Promise((resolve, reject) => {
 			var extra = new qiniu.io.PutExtra();
 		    qiniu.io.putFile(uptoken, key, localFile, extra, function(err, ret) {
-			    if(!err) {  
+			    if(!err) {
 			    	resolve(ret.key)
 			    } else {
 			    	console.log('图片上传至七牛失败', err);
@@ -196,5 +197,5 @@ export default class BaseComponent {
 		  	});
 
 		})
-	}	
+	}
 }

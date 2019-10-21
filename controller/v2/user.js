@@ -76,11 +76,11 @@ class User extends AddressComponent {
 						type: 'ERROR_PASSWORD',
 						message: '密码错误',
 					})
-					return 
+					return
 				}else{
 					req.session.user_id = user.user_id;
 					const userinfo = await UserInfoModel.findOne({user_id: user.user_id}, '-_id');
-					res.send(userinfo) 
+					res.send(userinfo)
 				}
 			}catch(err){
 				console.log('用户登陆失败', err);
@@ -103,11 +103,11 @@ class User extends AddressComponent {
 				type: 'GET_USER_INFO_FAIELD',
 				message: '通过session获取用户信息失败',
 			})
-			return 
+			return
 		}
 		try{
 			const userinfo = await UserInfoModel.findOne({user_id}, '-_id');
-			res.send(userinfo) 
+			res.send(userinfo)
 		}catch(err){
 			console.log('通过session获取用户信息失败', err);
 			res.send({
@@ -126,11 +126,11 @@ class User extends AddressComponent {
 				type: 'GET_USER_INFO_FAIELD',
 				message: '通过用户ID获取用户信息失败',
 			})
-			return 
+			return
 		}
 		try{
 			const userinfo = await UserInfoModel.findOne({user_id}, '-_id');
-			res.send(userinfo) 
+			res.send(userinfo)
 		}catch(err){
 			console.log('通过用户ID获取用户信息失败', err);
 			res.send({
@@ -274,7 +274,7 @@ class User extends AddressComponent {
 				type: 'ERROR_USERID',
 				message: 'user_id参数错误',
 			})
-			return 
+			return
 		}
 
 		try{
@@ -320,6 +320,6 @@ class User extends AddressComponent {
 			})
 		})
 	}
-} 
+}
 
 export default new User()

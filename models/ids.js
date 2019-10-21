@@ -12,9 +12,18 @@ const idsSchema = new mongoose.Schema({
 	img_id: Number,
 	category_id: Number,
 	item_id: Number,
-	sku_id: Number, 
+	sku_id: Number,
 	admin_id: Number,
-	statis_id: Number,
+    statis_id: Number,
+    person_id: Number,
+    airplane_id: Number,
+    equip_id: Number,
+    ensure_id: Number,
+    device_id: Number,
+    vehicle_id: Number,
+    subject_id: Number,
+    plan_id: Number,
+    organiz_id: Number
 });
 
 const Ids = mongoose.model('Ids', idsSchema);
@@ -31,9 +40,18 @@ Ids.findOne((err, data) => {
 			img_id: 0,
 			category_id: 0,
 			item_id: 0,
-			sku_id: 0, 
+			sku_id: 0,
 			admin_id: 0,
-			statis_id: 0,
+            statis_id: 0,
+            person_id: 0,
+            airplane_id:0,
+            equip_id: 0,
+            ensure_id: 0,
+            device_id: 0,
+            vehicle_id: 0,
+            subject_id: 0,
+            plan_id: 0,
+            organiz_id: 0
 		});
 		newIds.save();
 	}
