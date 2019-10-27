@@ -15,6 +15,7 @@ import Subject from '../controller/wcbz/subject'
 import Plan from '../controller/wcbz/plan'
 import Organiz from '../controller/wcbz/organiz'
 import Config from '../controller/wcbz/config'
+import Ammo from '../controller/wcbz/Ammo'
 
 const router = express.Router();
 
@@ -90,6 +91,8 @@ router.delete('/deleteSubject/:Subject_id', Subject.deleteSubject);
 // 计划管理
 router.post('/addPlan', Plan.addPlan);
 router.get('/getPlan', Plan.getPlan);
+router.get('/getPlanbyID/:Plan_id', Plan.getPlanDetail);
+router.post('/updatePlan', Plan.updatePlan);
 
 // 配置任务状态
 router.post('/addConfig', Config.addConfig);
@@ -99,5 +102,13 @@ router.post('/updateConfig', Config.updateConfig);
 // 组织架构管理
 router.post('/addOrganiz', Organiz.addOrganiz);
 router.get('/getOrganiz', Organiz.getOrganiz);
+
+// 弹药管理
+router.post('/addAmmo', Ammo.addammo);
+router.post('/updateAmmo', Ammo.updateammo);
+router.get('/getAmmo', Ammo.getammo);
+router.get('/getAmmoCount', Ammo.getammoCount);
+router.get('/getAmmo/:Ammo_id', Ammo.getammoDetail);
+router.delete('/deleteAmmo/:Ammo_id', Ammo.deleteammo);
 
 export default router

@@ -15,6 +15,9 @@ const pdeviceSchema = new Schema({
     filed7: String,
     filed8: String,
     filed9: String,
+    filed10: String,
+    filed11: String,
+    filed12: String,
     sy: String
 
 })

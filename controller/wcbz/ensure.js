@@ -40,6 +40,8 @@ class Ensure extends BaseComponent{
                 filed4: fields.filed4,
                 filed5: fields.filed5,
                 filed6: fields.filed6,
+                filed7: fields.filed7,
+                filed8: fields.filed8,
                 create_time: dtime().format('YYYY-MM-DD HH:mm')
 			}
 			try{

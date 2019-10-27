@@ -42,6 +42,8 @@ class Plan extends BaseComponent{
                 sceneSubject: fields.sceneSubject, // 气象科目
                 upDownNumber: fields.upDownNumber, // 起落次数
                 flightTime: fields.flightTime, // 飞行时间
+                approachTime: fields.approachTime, // 进场时间
+                totalNumber: fields.totalNumber, // 总人数
 			}
 			try{
 				//保存数据，并增加对应食品种类的数量
@@ -138,12 +140,32 @@ class Plan extends BaseComponent{
 			}
 			const {
                 plan_id,
+                name,
+                dateTime,
+                airName,
+                vehicleName,
+                subjectName,
+                airSubject,
+                sceneSubject,
+                upDownNumber,
+                flightTime,
+                approachTime,
+                totalNumber
             } = fields;
 			try {
 				let newData;
 				newData = {
-                    model,
-                    name
+                    name,
+                    dateTime,
+                    airName,
+                    vehicleName,
+                    subjectName,
+                    airSubject,
+                    sceneSubject,
+                    upDownNumber,
+                    flightTime,
+                    approachTime,
+                    totalNumber
                 }
 				await planModel.findOneAndUpdate({plan_id}, {$set: newData});
 				res.send({

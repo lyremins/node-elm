@@ -1,26 +1,26 @@
 'use strict';
 
-import deviceModel from '../../models/wcbz/device'
+import ammoModel from '../../models/wcbz/ammo'
 import BaseComponent from '../../prototype/baseComponent'
 import formidable from 'formidable'
 import dtime from 'time-formater'
 
-class Device extends BaseComponent{
+class ammo extends BaseComponent{
 	constructor(){
 		super()
-		this.addDevice = this.addDevice.bind(this);
-		this.getDevice = this.getDevice.bind(this);
-		this.getDeviceCount = this.getDeviceCount.bind(this);
-		this.getDeviceDetail = this.getDeviceDetail.bind(this);
-		this.updateDevice = this.updateDevice.bind(this);
-		this.deleteDevice = this.deleteDevice.bind(this);
+		this.addammo = this.addammo.bind(this);
+		this.getammo = this.getammo.bind(this);
+		this.getammoCount = this.getammoCount.bind(this);
+		this.getammoDetail = this.getammoDetail.bind(this);
+		this.updateammo = this.updateammo.bind(this);
+		this.deleteammo = this.deleteammo.bind(this);
 	}
 	//添加人员
-	async addDevice(req, res, next){
-        let device_id;
+	async addammo(req, res, next){
+        let ammo_id;
 		try{
-            device_id = await this.getId('device_id');
-            console.log(device_id);
+            ammo_id = await this.getId('ammo_id');
+            console.log(ammo_id);
 		}catch(err){
 			console.log('获取id失败');
 			res.send({
@@ -32,8 +32,8 @@ class Device extends BaseComponent{
 		const form = new formidable.IncomingForm();
 		form.parse(req, async (err, fields, files) => {
 			const opening_hours = fields.startTime&&fields.endTime? fields.startTime + '/' + fields.endTime : "8:30/20:30";
-			const newDevice = {
-                device_id,
+			const newammo = {
+                ammo_id,
 				filed1: fields.filed1,
                 filed2: fields.filed2,
                 filed3: fields.filed3,
@@ -41,18 +41,12 @@ class Device extends BaseComponent{
                 filed5: fields.filed5,
                 filed6: fields.filed6,
                 filed7: fields.filed7,
-                filed8: fields.filed8,
-                filed9: fields.filed9,
-                filed10: fields.filed10,
-                filed11: fields.filed11,
-                filed12: fields.filed12,
-                sy: fields.sy,
                 create_time: dtime().format('YYYY-MM-DD HH:mm')
 			}
 			try{
 				//保存数据，并增加对应食品种类的数量
-				const device = new deviceModel(newDevice);
-				await device.save();
+				const ammo = new ammoModel(newammo);
+				await ammo.save();
 				res.send({
 					status: 1,
 					sussess: '添加成功'
@@ -68,10 +62,10 @@ class Device extends BaseComponent{
 		})
     }
     // 查询人员
-	async getDevice(req, res, next){
+	async getammo(req, res, next){
 		const {limit = 20, offset = 0} = req.query;
 		try{
-			const users = await deviceModel.find({}, '-_id').limit(Number(limit)).skip(Number(offset));
+			const users = await ammoModel.find({}, '-_id').limit(Number(limit)).skip(Number(offset));
 			res.send({
 				status: 1,
 				data: users,
@@ -86,9 +80,9 @@ class Device extends BaseComponent{
 		}
     }
     // 查询人员条数
-    async getDeviceCount(req, res, next){
+    async getammoCount(req, res, next){
 		try{
-			const count = await deviceModel.count()
+			const count = await ammoModel.count()
 			res.send({
 				status: 1,
 				count,
@@ -103,10 +97,10 @@ class Device extends BaseComponent{
 		}
     }
     // 获取人员详情
-	async getDeviceDetail(req, res, next){
+	async getammoDetail(req, res, next){
         console.log(req.params);
-		const device_id = req.params.Device_id;
-		if (!device_id || !Number(device_id)) {
+		const ammo_id = req.params.Ammo_id;
+		if (!ammo_id || !Number(ammo_id)) {
 			console.log('获取ID错误');
 			res.send({
 				status: 0,
@@ -116,9 +110,9 @@ class Device extends BaseComponent{
 			return
 		}
 		try{
-            const device = await deviceModel.findOne({device_id});
-            console.log(device);
-			res.send(device)
+            const ammo = await ammoModel.findOne({ammo_id});
+            console.log(ammo);
+			res.send(ammo)
 		}catch(err){
 			console.log('获取人员详情失败', err);
 			res.send({
@@ -129,7 +123,7 @@ class Device extends BaseComponent{
 		}
     }
     // 更新人员
-    async updateDevice(req, res, next){
+    async updateammo(req, res, next){
         const form = new formidable.IncomingForm();
 		form.parse(req, async (err, fields, files) => {
 			if (err) {
@@ -141,11 +135,11 @@ class Device extends BaseComponent{
 				})
 				return
 			}
-			const {device_id,filed1, filed2,filed3,filed4,filed5,filed6,filed7,filed8,filed9,filed10,filed11,filed12,sy} = fields;
+			const {filed1,filed2,filed3,filed4,filed5,filed6,filed7} = fields;
 			try{
 				let newData;
-				newData = {filed1,filed2,filed3,filed4,filed5,filed6,filed7,filed8,filed9,filed10,filed11,filed12,sy}
-				await deviceModel.findOneAndUpdate({device_id}, {$set: newData});
+				newData = {filed1,filed2,filed3,filed4,filed5,filed6,filed7}
+				await ammoModel.findOneAndUpdate({ammo_id}, {$set: newData});
 				res.send({
 					status: 1,
 					success: '修改信息成功',
@@ -161,21 +155,21 @@ class Device extends BaseComponent{
 		})
     }
     // 删除人员
-    async deleteDevice(req, res, next){
+    async deleteammo(req, res, next){
         console.log(req.params);
-        const device_id = req.params.Device_id;
-        console.log(device_id);
-		if (!device_id || !Number(device_id)) {
-			console.log('device_id参数错误');
+        const ammo_id = req.params.ammo_id;
+        console.log(ammo_id);
+		if (!ammo_id || !Number(ammo_id)) {
+			console.log('ammo_id参数错误');
 			res.send({
 				status: 0,
 				type: 'ERROR_PARAMS',
-				message: 'device_id参数错误',
+				message: 'ammo_id参数错误',
 			})
 			return
 		}
 		try{
-			await deviceModel.findOneAndRemove({device_id});
+			await ammoModel.findOneAndRemove({ammo_id});
 			res.send({
 				status: 1,
 				success: '删除成功',
@@ -191,4 +185,4 @@ class Device extends BaseComponent{
 	}
 }
 
-export default new Device()
+export default new ammo()

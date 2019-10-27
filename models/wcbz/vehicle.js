@@ -8,7 +8,7 @@ const vehicleSchema = new Schema({
     vehicle_id: Number, // 车辆ID
     model: String,       // 车辆型号
     code: String,        // 出厂号码
-    name: String,
+    name: String, // 车辆名称
     state: String, // 状态
     organiz: String, // 单位
     service: String, // 服务机型

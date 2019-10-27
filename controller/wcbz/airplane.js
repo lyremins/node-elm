@@ -45,6 +45,7 @@ class Airplane extends BaseComponent{
 			}
 			const newAirplane = {
                 airplane_id, // 飞机ID
+                type: fields.type, // 机型
                 model: fields.model,       // 飞机型号
                 code: fields.code,        // 出厂号码
                 army_id: fields.army_id, // 部队编号
@@ -53,15 +54,20 @@ class Airplane extends BaseComponent{
                 unit: fields.unit, // 所属单位
                 airTime: fields.airTime, // 飞行时间
                 airUpOrDown: fields.airUpOrDown, // 总飞行起落
+                yairUpOrDown: fields.yairUpOrDown, // 已飞行起落
                 airHour: fields.airHour, // 飞行小时
+                yairHour: fields.yairHour, // 已行小时
                 stageUpOrDown: fields.stageUpOrDown, // 阶段起落
                 engine_1: fields.engine_1, // 发动机1小时数
                 engine_2: fields.engine_2, // 发动机2小时
                 image_path: fields.image_path, // 飞机图片
                 create_time: dtime().format('YYYY-MM-DD HH:mm'),
-                type: fields.type, // 机型
                 stageUpOrDownTime: fields.type, // 阶段飞行小时
                 repairNumber: fields.type, // 大修次数
+                repairFactory: fields.repairFactory, // 大修次数
+                state: fields.state, // 飞机态势
+                task: fields.task, // 飞机任务态势
+
 			}
 			try{
 				//保存数据，并增加对应食品种类的数量
@@ -166,7 +172,9 @@ class Airplane extends BaseComponent{
                 unit,
                 airTime,
                 airUpOrDown,
+                yairUpOrDown,
                 airHour,
+                yairHour,
                 stageUpOrDown,
                 engine_1,
                 engine_2,
@@ -175,7 +183,8 @@ class Airplane extends BaseComponent{
                 task,
                 type,
                 stageUpOrDownTime,
-                repairNumber
+                repairNumber,
+                repairFactory
             } = fields;
             const create_time = dtime().format('YYYY-MM-DD HH:mm');
 			try {
@@ -189,7 +198,9 @@ class Airplane extends BaseComponent{
                     unit,
                     airTime,
                     airUpOrDown,
+                    yairUpOrDown,
                     airHour,
+                    yairHour,
                     stageUpOrDown,
                     engine_1,
                     engine_2,
@@ -199,7 +210,8 @@ class Airplane extends BaseComponent{
                     create_time,
                     type,
                     stageUpOrDownTime,
-                    repairNumber
+                    repairNumber,
+                    repairFactory
                 }
 				await airplaneModel.findOneAndUpdate({airplane_id}, {$set: newData});
 				res.send({
