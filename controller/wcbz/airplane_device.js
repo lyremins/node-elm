@@ -1,6 +1,6 @@
 'use strict';
 
-import airplaneDeviceModel from '../../models/wcbz/airplane_Device'
+import airplaneDeviceModel from '../../models/wcbz/airplane_device'
 import BaseComponent from '../../prototype/baseComponent'
 import formidable from 'formidable'
 import dtime from 'time-formater'

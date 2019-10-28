@@ -168,7 +168,10 @@ class Personnel extends BaseComponent{
 				})
 				return
 			}
-            const {user_name, sex,phone,type,person_id,detachment,
+            const {user_name,
+                sex,phone,
+                type,person_id,
+                detachment,
                 organiz,
                 native,
                 company,
