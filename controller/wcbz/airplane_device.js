@@ -1,25 +1,25 @@
 'use strict';
 
-import airplaneModel from '../../models/wcbz/airplane'
+import airplaneDeviceModel from '../../models/wcbz/airplane_Device'
 import BaseComponent from '../../prototype/baseComponent'
 import formidable from 'formidable'
 import dtime from 'time-formater'
 
-class Airplane extends BaseComponent{
+class AirplaneDevice extends BaseComponent{
 	constructor(){
 		super()
-		this.addAirplane = this.addAirplane.bind(this);
-		this.getAirplane = this.getAirplane.bind(this);
-		this.getAirplaneCount = this.getAirplaneCount.bind(this);
-		this.getAirplaneDetail = this.getAirplaneDetail.bind(this);
-		this.updateAirplane = this.updateAirplane.bind(this);
-		this.deleteAirplane = this.deleteAirplane.bind(this);
+		this.addAirplaneDevice = this.addAirplaneDevice.bind(this);
+		this.getAirplaneDevice = this.getAirplaneDevice.bind(this);
+		this.getAirplaneDeviceCount = this.getAirplaneDeviceCount.bind(this);
+		this.getAirplaneDeviceDetail = this.getAirplaneDeviceDetail.bind(this);
+		this.updateAirplaneDevice = this.updateAirplaneDevice.bind(this);
+		this.deleteAirplaneDevice = this.deleteAirplaneDevice.bind(this);
 	}
 	//添加人员
-	async addAirplane(req, res, next){
-        let airplane_id;
+	async addAirplaneDevice(req, res, next){
+        let airplaneDevice_id;
 		try{
-            airplane_id = await this.getId('airplane_id');
+            airplaneDevice_id = await this.getId('airplaneDevice_id');
 		}catch(err){
 			console.log('获取id失败');
 			res.send({
@@ -43,36 +43,20 @@ class Airplane extends BaseComponent{
 				})
 				return
 			}
-			const newAirplane = {
-                airplane_id, // 飞机ID
-                type: fields.type, // 机型
-                model: fields.model,       // 飞机型号
-                code: fields.code,        // 出厂号码
-                army_id: fields.army_id, // 部队编号
-                factory: fields.factory, // 生产厂家
-                date: fields.date, // 生产时间
-                unit: fields.unit, // 所属单位
-                airTime: fields.airTime, // 飞行时间
-                airUpOrDown: fields.airUpOrDown, // 总飞行起落
-                yairUpOrDown: fields.yairUpOrDown, // 已飞行起落
-                airHour: fields.airHour, // 飞行小时
-                yairHour: fields.yairHour, // 已行小时
-                stageUpOrDown: fields.stageUpOrDown, // 阶段起落
-                engine_1: fields.engine_1, // 发动机1小时数
-                engine_2: fields.engine_2, // 发动机2小时
-                image_path: fields.image_path, // 飞机图片
-                create_time: dtime().format('YYYY-MM-DD HH:mm'),
-                stageUpOrDownTime: fields.stageUpOrDownTime, // 阶段飞行小时
-                repairNumber: fields.repairNumber, // 大修次数
-                repairFactory: fields.repairFactory, // 大修次数
-                state: fields.state, // 飞机态势
-                task: fields.task, // 飞机任务态势
+			const newAirplaneDevice = {
+                airplaneDevice_id, // 飞机ID
+                name: fields.name, // 名称
+                air_code: fields.air_code,   // 飞机编号
+                device_code: fields.device_code, // 有售器件编号
+                sm: fields.sm, // 当前寿命
+                zsm: fields.zsm, // 总寿命
+                ys:fields.ys // 余寿报警阈值
 
 			}
 			try{
 				//保存数据，并增加对应食品种类的数量
-				const airplane = new airplaneModel(newAirplane);
-				await airplane.save();
+				const airplaneDevice = new airplaneDeviceModel(newAirplaneDevice);
+				await airplaneDevice.save();
 				res.send({
 					status: 1,
 					sussess: '添加成功'
@@ -88,10 +72,10 @@ class Airplane extends BaseComponent{
 		})
     }
     // 查询人员
-	async getAirplane(req, res, next){
+	async getAirplaneDevice(req, res, next){
 		const {limit = 20, offset = 0} = req.query;
 		try{
-            const users = await airplaneModel.find({}, '-_id').limit(Number(limit)).skip(Number(offset));
+            const users = await airplaneDeviceModel.find({}, '-_id').limit(Number(limit)).skip(Number(offset));
             console.log(users);
 			res.send({
 				status: 1,
@@ -107,10 +91,10 @@ class Airplane extends BaseComponent{
 		}
     }
     // 查询人员条数
-    async getAirplaneCount(req, res, next){
+    async getAirplaneDeviceCount(req, res, next){
 		try{
             console.log('222');
-			const count = await airplaneModel.count()
+			const count = await airplaneDeviceModel.count()
 			res.send({
 				status: 1,
 				count,
@@ -125,10 +109,10 @@ class Airplane extends BaseComponent{
 		}
     }
     // 获取人员详情
-	async getAirplaneDetail(req, res, next){
+	async getAirplaneDeviceDetail(req, res, next){
         console.log(req.params);
-		const airplane_id = req.params.airplane_id;
-		if (!airplane_id || !Number(airplane_id)) {
+		const airplaneDevice_id = req.params.airplaneDevice_id;
+		if (!airplaneDevice_id || !Number(airplaneDevice_id)) {
 			console.log('获取ID错误');
 			res.send({
 				status: 0,
@@ -138,8 +122,8 @@ class Airplane extends BaseComponent{
 			return
 		}
 		try{
-            const airplane = await airplaneModel.findOne({airplane_id});
-			res.send(airplane)
+            const airplaneDevice = await airplaneDeviceModel.findOne({airplaneDevice_id});
+			res.send(airplaneDevice)
 		}catch(err){
 			console.log('获取人员详情失败', err);
 			res.send({
@@ -150,7 +134,7 @@ class Airplane extends BaseComponent{
 		}
     }
     // 更新人员
-    async updateAirplane(req, res, next){
+    async updateAirplaneDevice(req, res, next){
         const form = new formidable.IncomingForm();
 		form.parse(req, async (err, fields, files) => {
 			if (err) {
@@ -163,28 +147,14 @@ class Airplane extends BaseComponent{
 				return
 			}
 			const {
-                airplane_id,
-                model,
-                code,
-                army_id,
-                factory,
-                date,
-                unit,
-                airTime,
-                airUpOrDown,
-                yairUpOrDown,
-                airHour,
-                yairHour,
-                stageUpOrDown,
-                engine_1,
-                engine_2,
-                image_path,
-                state,
-                task,
-                type,
-                stageUpOrDownTime,
-                repairNumber,
-                repairFactory
+                airplaneDevice_id,
+                name,
+                air_code,
+                device_code,
+                sm,
+                zsm,
+                ys
+
             } = fields;
             console.log(fields);
             const create_time = dtime().format('YYYY-MM-DD HH:mm');
@@ -215,7 +185,7 @@ class Airplane extends BaseComponent{
                     // repairFactory
                 }
                 console.log(newData);
-				await airplaneModel.findOneAndUpdate({airplane_id}, {$set: fields});
+				await airplaneDeviceModel.findOneAndUpdate({airplaneDevice_id}, {$set: fields});
 				res.send({
 					status: 1,
 					success: '修改信息成功',
@@ -231,20 +201,20 @@ class Airplane extends BaseComponent{
 		})
     }
     // 删除人员
-    async deleteAirplane(req, res, next){
+    async deleteAirplaneDevice(req, res, next){
         console.log(req.params);
-		const airplane_id = req.params.airplane_id;
-		if (!airplane_id || !Number(airplane_id)) {
-			console.log('airplane_id参数错误');
+		const airplaneDevice_id = req.params.airplaneDevice_id;
+		if (!airplaneDevice_id || !Number(airplaneDevice_id)) {
+			console.log('airplaneDevice_id参数错误');
 			res.send({
 				status: 0,
 				type: 'ERROR_PARAMS',
-				message: 'airplane_id参数错误',
+				message: 'airplaneDevice_id参数错误',
 			})
 			return
 		}
 		try{
-			await airplaneModel.findOneAndRemove({airplane_id});
+			await airplaneDeviceModel.findOneAndRemove({airplaneDevice_id});
 			res.send({
 				status: 1,
 				success: '删除成功',
@@ -260,4 +230,4 @@ class Airplane extends BaseComponent{
 	}
 }
 
-export default new Airplane()
+export default new AirplaneDevice()

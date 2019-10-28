@@ -24,7 +24,8 @@ const idsSchema = new mongoose.Schema({
     subject_id: Number,
     plan_id: Number,
     organiz_id: Number,
-    ammo_id: Number
+    ammo_id: Number,
+    airplaneDevice_id: Number,
 });
 
 const Ids = mongoose.model('Ids', idsSchema);
@@ -53,7 +54,8 @@ Ids.findOne((err, data) => {
             subject_id: 0,
             plan_id: 0,
             organiz_id: 0,
-            ammo_id: 0
+            ammo_id: 0,
+            airplaneDevice_id: 0
 		});
 		newIds.save();
 	}

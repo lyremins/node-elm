@@ -16,6 +16,7 @@ import Plan from '../controller/wcbz/plan'
 import Organiz from '../controller/wcbz/organiz'
 import Config from '../controller/wcbz/config'
 import Ammo from '../controller/wcbz/Ammo'
+import AirplaneDevice from '../controller/wcbz/airplane_device'
 
 const router = express.Router();
 
@@ -110,5 +111,13 @@ router.get('/getAmmo', Ammo.getammo);
 router.get('/getAmmoCount', Ammo.getammoCount);
 router.get('/getAmmo/:Ammo_id', Ammo.getammoDetail);
 router.delete('/deleteAmmo/:Ammo_id', Ammo.deleteammo);
+
+// 飞机-有售器件关联
+router.post('/addAirplaneDevice', AirplaneDevice.addAirplaneDevice);
+router.post('/updateAirplaneDevice', AirplaneDevice.updateAirplaneDevice);
+router.get('/getAirplaneDevice', AirplaneDevice.getAirplaneDevice);
+router.get('/getAirplaneDeviceCount', AirplaneDevice.getAirplaneDeviceCount);
+router.get('/getAirplaneDevice/:AirplaneDevice_id', AirplaneDevice.getAirplaneDeviceDetail);
+router.delete('/deleteAirplaneDevice/:AirplaneDevice_id', AirplaneDevice.deleteAirplaneDevice);
 
 export default router

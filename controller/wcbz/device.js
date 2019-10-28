@@ -31,6 +31,7 @@ class Device extends BaseComponent{
 		}
 		const form = new formidable.IncomingForm();
 		form.parse(req, async (err, fields, files) => {
+            console.log(fields);
 			const opening_hours = fields.startTime&&fields.endTime? fields.startTime + '/' + fields.endTime : "8:30/20:30";
 			const newDevice = {
                 device_id,

@@ -56,6 +56,8 @@ class Vehicle extends BaseComponent{
                 stageCourse: fields.stageCourse, // 阶段行驶里程
                 repairNumber: fields.repairNumber, // 大修次数
                 taskState: fields.taskState, // 车辆任务状态
+                state: fields.state, // 车辆任务状态
+                mileage: fields.mileage, // 车辆总里程
 			}
 			try{
 				//保存数据，并增加对应食品种类的数量
@@ -161,6 +163,7 @@ class Vehicle extends BaseComponent{
                 product,
                 productTime,
                 life,
+                mileage,
                 stageCourse,
                 repairNumber,
                 taskState
@@ -181,7 +184,7 @@ class Vehicle extends BaseComponent{
                     repairNumber,
                     taskState
                 }
-				await vehicleModel.findOneAndUpdate({vehicle_id}, {$set: newData});
+				await vehicleModel.findOneAndUpdate({vehicle_id}, {$set: fields});
 				res.send({
 					status: 1,
 					success: '修改信息成功',
