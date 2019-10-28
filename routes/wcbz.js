@@ -15,7 +15,7 @@ import Subject from '../controller/wcbz/subject'
 import Plan from '../controller/wcbz/plan'
 import Organiz from '../controller/wcbz/organiz'
 import Config from '../controller/wcbz/config'
-import Ammo from '../controller/wcbz/Ammo'
+import Ammo from '../controller/wcbz/ammo'
 import AirplaneDevice from '../controller/wcbz/airplane_device'
 
 const router = express.Router();
