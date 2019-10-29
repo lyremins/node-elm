@@ -17,6 +17,8 @@ import Organiz from '../controller/wcbz/organiz'
 import Config from '../controller/wcbz/config'
 import Ammo from '../controller/wcbz/ammo'
 import AirplaneDevice from '../controller/wcbz/airplane_device'
+import AirplaneAmmo from '../controller/wcbz/airplane_ammo'
+import AirplaneCar from '../controller/wcbz/airplane_car'
 
 const router = express.Router();
 
@@ -119,5 +121,21 @@ router.get('/getAirplaneDevice', AirplaneDevice.getAirplaneDevice);
 router.get('/getAirplaneDeviceCount', AirplaneDevice.getAirplaneDeviceCount);
 router.get('/getAirplaneDevice/:AirplaneDevice_id', AirplaneDevice.getAirplaneDeviceDetail);
 router.delete('/deleteAirplaneDevice/:AirplaneDevice_id', AirplaneDevice.deleteAirplaneDevice);
+
+// 飞机-弹药关联
+router.post('/addAirplaneAmmo', AirplaneAmmo.addAirplaneAmmo);
+router.post('/updateAirplaneAmmo', AirplaneAmmo.updateAirplaneAmmo);
+router.get('/getAirplaneAmmo', AirplaneAmmo.getAirplaneAmmo);
+router.get('/getAirplaneAmmoCount', AirplaneAmmo.getAirplaneAmmoCount);
+router.get('/getAirplaneAmmo/:AirplaneAmmo_id', AirplaneAmmo.getAirplaneAmmoDetail);
+router.delete('/deleteAirplaneAmmo/:AirplaneAmmo_id', AirplaneAmmo.deleteAirplaneAmmo);
+
+// 飞机-车辆关联
+router.post('/addAirplaneCar', AirplaneCar.addAirplaneCar);
+router.post('/updateAirplaneCar', AirplaneCar.updateAirplaneCar);
+router.get('/getAirplaneCar', AirplaneCar.getAirplaneCar);
+router.get('/getAirplaneCarCount', AirplaneCar.getAirplaneCarCount);
+router.get('/getAirplaneCar/:AirplaneCar_id', AirplaneCar.getAirplaneCarDetail);
+router.delete('/deleteAirplaneCar/:AirplaneCar_id', AirplaneCar.deleteAirplaneCar);
 
 export default router

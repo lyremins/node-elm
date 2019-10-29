@@ -11,7 +11,7 @@ qiniu.conf.SECRET_KEY = 'XNIW2dNffPBdaAhvm9dadBlJ-H6yyCTIJLxNM_N6';
 
 export default class BaseComponent {
 	constructor(){
-		this.idList = ['airplaneDevice_id','ammo_id','organiz_id','plan_id','subject_id','vehicle_id','device_id','ensure_id','equip_id','airplane_id','person_id','restaurant_id', 'food_id', 'order_id', 'user_id', 'address_id', 'cart_id', 'img_id', 'category_id', 'item_id', 'sku_id', 'admin_id', 'statis_id'];
+		this.idList = ['airplaneAmmo_id','airplaneCar_id','airplaneDevice_id','ammo_id','organiz_id','plan_id','subject_id','vehicle_id','device_id','ensure_id','equip_id','airplane_id','person_id','restaurant_id', 'food_id', 'order_id', 'user_id', 'address_id', 'cart_id', 'img_id', 'category_id', 'item_id', 'sku_id', 'admin_id', 'statis_id'];
 		this.imgTypeList = ['shop', 'food', 'avatar','default'];
 		this.uploadImg = this.uploadImg.bind(this)
 		this.qiniu = this.qiniu.bind(this)
@@ -60,6 +60,7 @@ export default class BaseComponent {
 	}
 	//获取id列表
 	async getId(type){
+        console.log('3333', type);
 		if (!this.idList.includes(type)) {
 			console.log('id类型错误');
 			throw new Error('id类型错误');

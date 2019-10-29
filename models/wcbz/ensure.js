@@ -8,9 +8,9 @@ const pensureSchema = new Schema({
     ensure_id: Number,
     filed1: String,
     filed2: String,
-    filed3: String,
-    filed4: String,
-    filed5: String,
+    filed3: [],
+    filed4: [],
+    filed5: [],
     filed6: String,
     filed7: String,
     filed8: String
