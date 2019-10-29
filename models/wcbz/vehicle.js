@@ -20,6 +20,7 @@ const vehicleSchema = new Schema({
     repairNumber: String, // 大修次数
     state: String, // 车辆状态
     taskState: String, // 车辆任务状态
+    enter: String, // 进场状态
 
 
 

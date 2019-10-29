@@ -19,6 +19,7 @@ import Ammo from '../controller/wcbz/ammo'
 import AirplaneDevice from '../controller/wcbz/airplane_device'
 import AirplaneAmmo from '../controller/wcbz/airplane_ammo'
 import AirplaneCar from '../controller/wcbz/airplane_car'
+import Chat from '../controller/wcbz/chat'
 
 const router = express.Router();
 
@@ -29,6 +30,13 @@ router.get('/getPersonnel', Personnel.getPersonnel);
 router.get('/getPersonnelCount', Personnel.getPersonnelCount);
 router.get('/getPersonnel/:person_id', Personnel.getPersonnelDetail);
 router.delete('/deletePersonnel/:person_id', Personnel.deletePersonnel);
+
+// 聊天管理
+router.post('/addChat', Chat.addChat);
+router.get('/getChat', Chat.getChat);
+router.get('/getChatCount', Chat.getChatCount);
+router.get('/getChatDetail', Chat.getChatDetail);
+router.delete('/deleteChat/:chat_id', Chat.deleteChat);
 
 // 飞机管理
 router.post('/addAirplane', Airplane.addAirplane);

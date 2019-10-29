@@ -58,6 +58,7 @@ class Vehicle extends BaseComponent{
                 taskState: fields.taskState, // 车辆任务状态
                 state: fields.state, // 车辆任务状态
                 mileage: fields.mileage, // 车辆总里程
+                enter: fields.enter // 进场状态
 			}
 			try{
 				//保存数据，并增加对应食品种类的数量
@@ -166,7 +167,8 @@ class Vehicle extends BaseComponent{
                 mileage,
                 stageCourse,
                 repairNumber,
-                taskState
+                taskState,
+                enter
             } = fields;
 			try {
 				let newData;

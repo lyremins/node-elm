@@ -28,14 +28,12 @@ class User extends AddressComponent {
 		}
 		const form = new formidable.IncomingForm();
 		form.parse(req, async (err, fields, files) => {
-			const {username, password, captcha_code} = fields;
+			const {username, password} = fields;
 			try{
 				if (!username) {
 					throw new Error('用户名参数错误');
 				}else if(!password){
 					throw new Error('密码参数错误');
-				}else if(!captcha_code){
-					throw new Error('验证码参数错误');
 				}
 			}catch(err){
 				console.log('登陆参数错误', err);
@@ -43,14 +41,6 @@ class User extends AddressComponent {
 					status: 0,
 					type: 'ERROR_QUERY',
 					message: err.message,
-				})
-				return
-			}
-			if (cap.toString() !== captcha_code.toString()) {
-				res.send({
-					status: 0,
-					type: 'ERROR_CAPTCHA',
-					message: '验证码不正确',
 				})
 				return
 			}
