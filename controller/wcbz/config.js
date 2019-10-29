@@ -160,7 +160,7 @@ class Config extends BaseComponent{
                     pStatusModel,
                     carWorkModel
                 }
-				await configModel.findOneAndUpdate({$set: newData});
+				await configModel.findOneAndUpdate({$set: fields});
 				res.send({
 					status: 1,
 					success: '修改信息成功',
