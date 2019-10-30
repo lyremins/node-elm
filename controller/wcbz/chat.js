@@ -97,7 +97,8 @@ class Chat extends BaseComponent{
     // 获取人员详情
 	async getChatDetail(req, res, next){
         console.log("--------", req.query);
-		const chat_id = req.query;
+		const fromuid = req.query.fromuid;
+		const touid = req.query.touid;
 		// if (!chat_id || !Number(chat_id)) {
 		// 	console.log('获取ID错误');
 		// 	res.send({
@@ -108,7 +109,7 @@ class Chat extends BaseComponent{
 		// 	return
 		// }
 		try{
-            const chat = await chatModel.find(chat_id);
+            const chat = await chatModel.find({fromuid,touid});
 			res.send(chat)
 		}catch(err){
 			console.log('获取人员详情失败', err);

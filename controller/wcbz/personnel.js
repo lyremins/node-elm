@@ -197,7 +197,7 @@ class Personnel extends BaseComponent{
                 enlist,
                 school,
                 greatTask}
-				await personnelModel.findOneAndUpdate({person_id}, {$set: newData});
+				await personnelModel.findOneAndUpdate({person_id}, {$set: fields});
 				res.send({
 					status: 1,
 					success: '修改信息成功',
