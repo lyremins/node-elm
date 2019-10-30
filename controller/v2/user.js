@@ -48,7 +48,10 @@ class User extends AddressComponent {
 					const createUser = new UserInfoModel(newUserInfo);
 					const userinfo = await createUser.save();
 					req.session.user_id = user_id;
-					res.send(userinfo);
+                    res.send({
+                        status: 1,
+                        data: userinfo,
+                    })
 				}else if (user.password.toString() !== newpassword.toString()) {
 					console.log('用户登录密码错误')
 					res.send({
@@ -60,7 +63,11 @@ class User extends AddressComponent {
 				}else{
 					req.session.user_id = user.user_id;
 					const userinfo = await UserInfoModel.findOne({user_id: user.user_id}, '-_id');
-					res.send(userinfo)
+                    res.send({
+                        status: 1,
+                        data: userinfo,
+                    })
+
 				}
 			}catch(err){
 				console.log('用户登陆失败', err);
@@ -87,7 +94,10 @@ class User extends AddressComponent {
 		}
 		try{
 			const userinfo = await UserInfoModel.findOne({user_id}, '-_id');
-			res.send(userinfo)
+            res.send({
+                status: 1,
+                data: userinfo,
+            })
 		}catch(err){
 			console.log('通过session获取用户信息失败', err);
 			res.send({
@@ -110,7 +120,10 @@ class User extends AddressComponent {
 		}
 		try{
 			const userinfo = await UserInfoModel.findOne({user_id}, '-_id');
-			res.send(userinfo)
+            res.send({
+                status: 1,
+                data: userinfo,
+            })
 		}catch(err){
 			console.log('通过用户ID获取用户信息失败', err);
 			res.send({
@@ -217,7 +230,10 @@ class User extends AddressComponent {
 		const {limit = 20, offset = 0} = req.query;
 		try{
 			const users = await UserInfoModel.find({}, '-_id').sort({user_id: -1}).limit(Number(limit)).skip(Number(offset));
-			res.send(users);
+            res.send({
+                status: 1,
+                data: users,
+            })
 		}catch(err){
 			console.log('获取用户列表数据失败', err);
 			res.send({

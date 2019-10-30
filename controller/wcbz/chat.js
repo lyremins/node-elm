@@ -110,7 +110,10 @@ class Chat extends BaseComponent{
 		// }
 		try{
             const chat = await chatModel.find({fromuid,touid});
-			res.send(chat)
+            res.send({
+				status: 1,
+				data: chat,
+			})
 		}catch(err){
 			console.log('获取人员详情失败', err);
 			res.send({
