@@ -35,7 +35,7 @@ class Chat extends BaseComponent{
                 createtime: dtime().format('YYYY-MM-DD HH:mm'), // 创建时间
                 contentType: fields.contentType,        // 类型
                 chatType: fields.chatType, // 单聊 群聊
-                imgurl: fields.imgurl, // 图片
+                image_path: fields.image_path, // 图片
                 fromuid: fields.fromuid,
                 touid: fields.touid
 			}
