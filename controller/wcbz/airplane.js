@@ -89,7 +89,7 @@ class Airplane extends BaseComponent{
     }
     // 查询人员
 	async getAirplane(req, res, next){
-		const {limit = 20, offset = 0} = req.query;
+		const {limit = 1000, offset = 0} = req.query;
 		try{
             const users = await airplaneModel.find({}, '-_id').limit(Number(limit)).skip(Number(offset));
             console.log(users);
