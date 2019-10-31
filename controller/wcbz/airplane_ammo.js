@@ -35,6 +35,8 @@ class AirplaneAmmo extends BaseComponent{
                 name: fields.name, // 名称
                 air_code: fields.air_code,   // 飞机编号
                 ammo_code: fields.ammo_code, // 有售器件编号
+                zsm: fields.zsm, // 有售器件编号
+                sm: fields.sm, // 有售器件编号
 
 			}
 			try{
@@ -136,8 +138,7 @@ class AirplaneAmmo extends BaseComponent{
                 air_code,
                 ammo_code,
                 sm,
-                zsm,
-                ys
+                zsm
 
             } = fields;
             console.log(fields);

@@ -80,7 +80,7 @@ class Vehicle extends BaseComponent{
     }
     // 查询人员
 	async getVehicle(req, res, next){
-		const {limit = 20, offset = 0} = req.query;
+		const {limit = 200, offset = 0} = req.query;
 		try{
             const users = await vehicleModel.find({}, '-_id').limit(Number(limit)).skip(Number(offset));
             console.log(users);

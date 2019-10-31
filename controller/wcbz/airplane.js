@@ -151,6 +151,7 @@ class Airplane extends BaseComponent{
     }
     // 更新人员
     async updateAirplane(req, res, next){
+        console.log('32323243');
         const form = new formidable.IncomingForm();
 		form.parse(req, async (err, fields, files) => {
 			if (err) {
@@ -192,30 +193,30 @@ class Airplane extends BaseComponent{
 				let newData;
 				newData = {
                     model,
-                    code
-                    // army_id,
-                    // factory,
-                    // date,
-                    // unit,
-                    // airTime,
-                    // airUpOrDown,
-                    // yairUpOrDown,
-                    // airHour,
-                    // yairHour,
-                    // stageUpOrDown,
-                    // engine_1,
-                    // engine_2,
-                    // image_path,
-                    // state,
-                    // task,
-                    // create_time,
-                    // type,
-                    // stageUpOrDownTime,
-                    // repairNumber,
-                    // repairFactory
+                    code,
+                    army_id,
+                    factory,
+                    date,
+                    unit,
+                    airTime,
+                    airUpOrDown,
+                    yairUpOrDown,
+                    airHour,
+                    yairHour,
+                    stageUpOrDown,
+                    engine_1,
+                    engine_2,
+                    image_path,
+                    state,
+                    task,
+                    create_time,
+                    type,
+                    stageUpOrDownTime,
+                    repairNumber,
+                    repairFactory
                 }
-                console.log(newData);
-				await airplaneModel.findOneAndUpdate({airplane_id}, {$set: fields});
+                console.log("333333", newData);
+				await airplaneModel.findOneAndUpdate({airplane_id}, {$set: newData});
 				res.send({
 					status: 1,
 					success: '修改信息成功',

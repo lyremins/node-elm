@@ -96,7 +96,7 @@ class Personnel extends BaseComponent{
     }
     // 查询人员
 	async getPersonnel(req, res, next){
-		const {limit = 20, offset = 0} = req.query;
+		const {limit = 200, offset = 0} = req.query;
 		try{
 			const users = await personnelModel.find({}, '-_id').limit(Number(limit)).skip(Number(offset));
 			res.send({
@@ -168,7 +168,8 @@ class Personnel extends BaseComponent{
 				})
 				return
 			}
-            const {user_name,
+            const {
+                user_name,
                 sex,phone,
                 type,person_id,
                 detachment,

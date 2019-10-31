@@ -48,6 +48,7 @@ class Device extends BaseComponent{
                 filed11: fields.filed11,
                 filed12: fields.filed12,
                 sy: fields.sy,
+                smType: fields.smType,
                 create_time: dtime().format('YYYY-MM-DD HH:mm')
 			}
 			try{
