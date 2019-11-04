@@ -20,6 +20,7 @@ import AirplaneDevice from '../controller/wcbz/airplane_device'
 import AirplaneAmmo from '../controller/wcbz/airplane_ammo'
 import AirplaneCar from '../controller/wcbz/airplane_car'
 import Chat from '../controller/wcbz/chat'
+import Situation from '../controller/wcbz/situation'
 
 const router = express.Router();
 
@@ -145,5 +146,7 @@ router.get('/getAirplaneCar', AirplaneCar.getAirplaneCar);
 router.get('/getAirplaneCarCount', AirplaneCar.getAirplaneCarCount);
 router.get('/getAirplaneCar/:AirplaneCar_id', AirplaneCar.getAirplaneCarDetail);
 router.delete('/deleteAirplaneCar/:AirplaneCar_id', AirplaneCar.deleteAirplaneCar);
+
+router.get('/getSituation', Situation.getSituation);
 
 export default router
