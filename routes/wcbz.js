@@ -148,5 +148,7 @@ router.get('/getAirplaneCar/:AirplaneCar_id', AirplaneCar.getAirplaneCarDetail);
 router.delete('/deleteAirplaneCar/:AirplaneCar_id', AirplaneCar.deleteAirplaneCar);
 
 router.get('/getSituation', Situation.getSituation);
+router.get('/getAirplaneToPlan', Situation.getAirplaneToPlan);
+router.get('/getCarToEnsure', Situation.getCarToEnsure);
 
 export default router

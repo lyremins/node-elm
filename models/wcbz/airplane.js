@@ -29,6 +29,7 @@ const airplaneSchema = new Schema({
     image_path: { type: String, default: "" }, // 飞机图片
     create_time: String, // 操作时间
     enter: String, // 进场状态
+    wqNumber: Number // 武器发射
 
 
 })
