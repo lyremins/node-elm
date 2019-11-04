@@ -157,9 +157,9 @@ class ammo extends BaseComponent{
     // 删除人员
     async deleteammo(req, res, next){
         console.log(req.params);
-        const Ammo_id = req.params.Ammo_id;
-        console.log(Ammo_id);
-		if (!Ammo_id || !Number(Ammo_id)) {
+        const ammo_id = req.params.ammo_id;
+        console.log(ammo_id);
+		if (!ammo_id || !Number(ammo_id)) {
 			console.log('ammo_id参数错误');
 			res.send({
 				status: 0,
@@ -169,7 +169,8 @@ class ammo extends BaseComponent{
 			return
 		}
 		try{
-			await ammoModel.findOneAndRemove({Ammo_id});
+            const ddd = await ammoModel.findOneAndRemove(ammo_id);
+            console.log(ddd);
 			res.send({
 				status: 1,
 				success: '删除成功',

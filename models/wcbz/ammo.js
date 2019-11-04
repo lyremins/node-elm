@@ -18,7 +18,7 @@ const pammoSchema = new Schema({
 
 pammoSchema.index({id: 1});
 
-const ammo = mongoose.model('ammo', pammoSchema);
+const Ammo = mongoose.model('Ammo', pammoSchema);
 
 
-export default ammo
+export default Ammo

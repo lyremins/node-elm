@@ -119,8 +119,8 @@ router.post('/addAmmo', Ammo.addammo);
 router.post('/updateAmmo', Ammo.updateammo);
 router.get('/getAmmo', Ammo.getammo);
 router.get('/getAmmoCount', Ammo.getammoCount);
-router.get('/getAmmo/:Ammo_id', Ammo.getammoDetail);
-router.delete('/deleteAmmo/:Ammo_id', Ammo.deleteammo);
+router.get('/getAmmo/:ammo_id', Ammo.getammoDetail);
+router.delete('/deleteAmmo/:ammo_id', Ammo.deleteammo);
 
 // 飞机-有售器件关联
 router.post('/addAirplaneDevice', AirplaneDevice.addAirplaneDevice);
