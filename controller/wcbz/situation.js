@@ -69,6 +69,7 @@ class Situation extends BaseComponent{
                 "state": "完好",
                 "task": "飞行后",
                 "image_path": "",
+                "upDownNumber": 20,
                 "__v": 0,
                 "enter": "进场"
             }
