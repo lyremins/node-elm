@@ -44,6 +44,7 @@ class Plan extends BaseComponent{
                 flightTime: fields.flightTime, // 飞行时间
                 approachTime: fields.approachTime, // 进场时间
                 totalNumber: fields.totalNumber, // 总人数
+                airData:fields.airData
 			}
 			try{
 				//保存数据，并增加对应食品种类的数量
@@ -68,7 +69,6 @@ class Plan extends BaseComponent{
 		const {limit = 20, offset = 0} = req.query;
 		try{
             const users = await planModel.find({}, '-_id').limit(Number(limit)).skip(Number(offset));
-            console.log(users);
 			res.send({
 				status: 1,
 				data: users,
@@ -150,7 +150,8 @@ class Plan extends BaseComponent{
                 upDownNumber,
                 flightTime,
                 approachTime,
-                totalNumber
+                totalNumber,
+                airData
             } = fields;
 			try {
 				let newData;
@@ -167,7 +168,7 @@ class Plan extends BaseComponent{
                     approachTime,
                     totalNumber
                 }
-				await planModel.findOneAndUpdate({plan_id}, {$set: newData});
+				await planModel.findOneAndUpdate({plan_id}, {$set: fields});
 				res.send({
 					status: 1,
 					success: '修改信息成功',
@@ -185,7 +186,7 @@ class Plan extends BaseComponent{
     // 删除人员
     async deletePlan(req, res, next){
         console.log(req.params);
-		const plan_id = req.params.Plan_id;
+		const plan_id = req.params.plan_id;
 		if (!plan_id || !Number(plan_id)) {
 			console.log('plan_id参数错误');
 			res.send({

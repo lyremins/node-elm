@@ -227,7 +227,8 @@ class Personnel extends BaseComponent{
 			return
 		}
 		try{
-			await personnelModel.findOneAndRemove({person_id});
+            const sss = await personnelModel.findOneAndRemove({person_id});
+            console.log(sss);
 			res.send({
 				status: 1,
 				success: '删除成功',

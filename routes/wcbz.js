@@ -105,6 +105,7 @@ router.post('/addPlan', Plan.addPlan);
 router.get('/getPlan', Plan.getPlan);
 router.get('/getPlanbyID/:Plan_id', Plan.getPlanDetail);
 router.post('/updatePlan', Plan.updatePlan);
+router.delete('/deletePlan/:plan_id', Plan.deletePlan);
 
 // 配置任务状态
 router.post('/addConfig', Config.addConfig);
@@ -150,5 +151,4 @@ router.delete('/deleteAirplaneCar/:AirplaneCar_id', AirplaneCar.deleteAirplaneCa
 router.get('/getSituation', Situation.getSituation);
 router.get('/getAirplaneToPlan', Situation.getAirplaneToPlan);
 router.get('/getCarToEnsure', Situation.getCarToEnsure);
-
 export default router

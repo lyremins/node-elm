@@ -1,7 +1,9 @@
 'use strict';
 
 import airplaneModel from '../../models/wcbz/airplane'
+import planModel from '../../models/wcbz/plan'
 import BaseComponent from '../../prototype/baseComponent'
+import { SSL_OP_SSLEAY_080_CLIENT_DH_BUG } from 'constants';
 
 class Situation extends BaseComponent{
 	constructor(){
@@ -10,23 +12,61 @@ class Situation extends BaseComponent{
 		this.getAirplaneToPlan = this.getAirplaneToPlan.bind(this);
 		this.getCarToEnsure = this.getCarToEnsure.bind(this);
 
-	}
+    }
+    toTimeStamp(time) {
+        time = time.replace(/-/g, '/') // 把所有-转化成/
+        let timestamp = new Date(time).getTime()
+        return timestamp
+    }
     // 查询人员条数
     async getSituation(req, res, next){
 		try{
             console.log('222');
-            const count = await airplaneModel.count()
+            var day2 = new Date();
+            day2.setTime(day2.getTime());
+            let day = '';
+            day = parseInt(day2.getDate()) < 10 ? '0' + day2.getDate() : day2.getDate()
+            let dayTime = day2.getFullYear()+"-" + (day2.getMonth()+1) + "-" + day;
+            console.log(dayTime);
+            const date = {
+                dateTime: dayTime
+            }
+            console.log(date);
+            let totalUpDown = 0;
+            const count = await airplaneModel.count();
+            const plan = await planModel.find(date);
+            let totalAirplane = 0;
+            console.log('6666666', plan);
+            if (plan.length) {
+                plan[0].airData.forEach(element => {
+                    totalAirplane = plan[0].airData.length;
+                    console.log("xxxxxx", element.upDownNumber);
+                    totalUpDown += parseInt(element.upDownNumber);
+                });
+            }
+            const users = await airplaneModel.find();
+            console.log(users);
+            const array = [];
+            let nnnn = 0;
+            users.forEach(element => {
+                if (this.toTimeStamp(element.create_time) > this.toTimeStamp(dayTime)) {
+                    array.push(element);
+                    nnnn += parseInt(element.airUpOrDown);
+                }
+            });
+            console.log(users);
+            // const enter = await this.getAirplaneToPlan();
             const data = {
-                totalAirplane: count,
-                enterAirplane: count,
-                totalUpDown: count,
-                doneUpdown: count,
-                enterPerson: count,
-                donePerson: count,
-                totalCar: count,
-                totalTask: count,
-                enterCar: count,
-                doneTask: count
+                totalAirplane: totalAirplane,
+                enterAirplane: array.length,
+                totalUpDown: totalUpDown,
+                doneUpdown: nnnn,
+                enterPerson: 0,
+                donePerson: 0,
+                totalCar: 0,
+                totalTask: 0,
+                enterCar: 0,
+                doneTask: 0
             }
 			res.send({
 				status: 1,
@@ -42,10 +82,24 @@ class Situation extends BaseComponent{
 		}
     }
     async getAirplaneToPlan(req, res, next){
-		const {limit = 1000, offset = 0} = req.query;
+        const {limit = 1000, offset = 0} = req.query;
+        var day2 = new Date();
+        day2.setTime(day2.getTime());
+        let day = '';
+        day = parseInt(day2.getDate()) < 10 ? '0' + day2.getDate() : day2.getDate()
+        let dayTime = day2.getFullYear()+"-" + (day2.getMonth()+1) + "-" + day;
+        const date = {
+            dateTime: dayTime
+        }
 		try{
-            const users = await airplaneModel.find({}, '-_id').limit(Number(limit)).skip(Number(offset));
+            const users = await airplaneModel.find({})
             console.log(users);
+            const array = [];
+            users.forEach(element => {
+                if (this.toTimeStamp(element.create_time) > this.toTimeStamp(dayTime)) {
+                    array.push(element);
+                }
+            });
             const data =  [{
                 "airplane_id": 16,
                 "type": "测试11111",
@@ -101,7 +155,7 @@ class Situation extends BaseComponent{
             }]
 			res.send({
 				status: 1,
-				data: data,
+				data: array,
 			})
 		}catch(err){
 			console.log('获取飞机列表数据失败', err);

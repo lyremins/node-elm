@@ -1,26 +1,26 @@
 'use strict';
 
-import ammoModel from '../../models/wcbz/ammo'
+import logModel from '../../models/wcbz/log'
 import BaseComponent from '../../prototype/baseComponent'
 import formidable from 'formidable'
 import dtime from 'time-formater'
 
-class ammo extends BaseComponent{
+class Log extends BaseComponent{
 	constructor(){
 		super()
-		this.addammo = this.addammo.bind(this);
-		this.getammo = this.getammo.bind(this);
-		this.getammoCount = this.getammoCount.bind(this);
-		this.getammoDetail = this.getammoDetail.bind(this);
-		this.updateammo = this.updateammo.bind(this);
-		this.deleteammo = this.deleteammo.bind(this);
+		this.addLog = this.addLog.bind(this);
+		this.getLog = this.getLog.bind(this);
+		this.getLogCount = this.getLogCount.bind(this);
+		this.getLogDetail = this.getLogDetail.bind(this);
+		this.updateLog = this.updateLog.bind(this);
+		this.deleteLog = this.deleteLog.bind(this);
 	}
 	//添加人员
-	async addammo(req, res, next){
-        let ammo_id;
+	async addLog(req, res, next){
+        let log_id;
 		try{
-            ammo_id = await this.getId('ammo_id');
-            console.log(ammo_id);
+            log_id = await this.getId('log_id');
+            console.log(log_id);
 		}catch(err){
 			console.log('获取id失败');
 			res.send({
@@ -31,9 +31,10 @@ class ammo extends BaseComponent{
 		}
 		const form = new formidable.IncomingForm();
 		form.parse(req, async (err, fields, files) => {
+            console.log(fields);
 			const opening_hours = fields.startTime&&fields.endTime? fields.startTime + '/' + fields.endTime : "8:30/20:30";
-			const newammo = {
-                ammo_id,
+			const newLog = {
+                log_id,
 				filed1: fields.filed1,
                 filed2: fields.filed2,
                 filed3: fields.filed3,
@@ -41,12 +42,17 @@ class ammo extends BaseComponent{
                 filed5: fields.filed5,
                 filed6: fields.filed6,
                 filed7: fields.filed7,
+                filed8: fields.filed8,
+                filed9: fields.filed9,
+                filed10: fields.filed10,
+                filed11: fields.filed11,
+                filed12: fields.filed12,
                 create_time: dtime().format('YYYY-MM-DD HH:mm')
 			}
 			try{
 				//保存数据，并增加对应食品种类的数量
-				const ammo = new ammoModel(newammo);
-				await ammo.save();
+				const log = new logModel(newLog);
+				await log.save();
 				res.send({
 					status: 1,
 					sussess: '添加成功'
@@ -62,10 +68,10 @@ class ammo extends BaseComponent{
 		})
     }
     // 查询人员
-	async getammo(req, res, next){
+	async getLog(req, res, next){
 		const {limit = 20, offset = 0} = req.query;
 		try{
-			const users = await ammoModel.find({}, '-_id').limit(Number(limit)).skip(Number(offset));
+			const users = await logModel.find({}, '-_id').limit(Number(limit)).skip(Number(offset));
 			res.send({
 				status: 1,
 				data: users,
@@ -80,9 +86,9 @@ class ammo extends BaseComponent{
 		}
     }
     // 查询人员条数
-    async getammoCount(req, res, next){
+    async getLogCount(req, res, next){
 		try{
-			const count = await ammoModel.count()
+			const count = await logModel.count()
 			res.send({
 				status: 1,
 				count,
@@ -97,10 +103,10 @@ class ammo extends BaseComponent{
 		}
     }
     // 获取人员详情
-	async getammoDetail(req, res, next){
+	async getLogDetail(req, res, next){
         console.log(req.params);
-		const ammo_id = req.params.Ammo_id;
-		if (!ammo_id || !Number(ammo_id)) {
+		const log_id = req.params.Log_id;
+		if (!log_id || !Number(log_id)) {
 			console.log('获取ID错误');
 			res.send({
 				status: 0,
@@ -110,9 +116,9 @@ class ammo extends BaseComponent{
 			return
 		}
 		try{
-            const ammo = await ammoModel.findOne({ammo_id});
-            console.log(ammo);
-			res.send(ammo)
+            const log = await logModel.findOne({log_id});
+            console.log(log);
+			res.send(log)
 		}catch(err){
 			console.log('获取人员详情失败', err);
 			res.send({
@@ -123,7 +129,7 @@ class ammo extends BaseComponent{
 		}
     }
     // 更新人员
-    async updateammo(req, res, next){
+    async updateLog(req, res, next){
         const form = new formidable.IncomingForm();
 		form.parse(req, async (err, fields, files) => {
 			if (err) {
@@ -135,11 +141,11 @@ class ammo extends BaseComponent{
 				})
 				return
 			}
-			const {ammo_id,filed1,filed2,filed3,filed4,filed5,filed6,filed7} = fields;
+			const {log_id,filed1, filed2,filed3,filed4,filed5,filed6,filed7,filed8,filed9,filed10,filed11,filed12,sy} = fields;
 			try{
 				let newData;
-				newData = {filed1,filed2,filed3,filed4,filed5,filed6,filed7}
-				await ammoModel.findOneAndUpdate({ammo_id}, {$set: fields});
+				newData = {filed1,filed2,filed3,filed4,filed5,filed6,filed7,filed8,filed9,filed10,filed11,filed12,sy}
+				await logModel.findOneAndUpdate({log_id}, {$set: newData});
 				res.send({
 					status: 1,
 					success: '修改信息成功',
@@ -155,22 +161,21 @@ class ammo extends BaseComponent{
 		})
     }
     // 删除人员
-    async deleteammo(req, res, next){
+    async deleteLog(req, res, next){
         console.log(req.params);
-        const ammo_id = req.params.ammo_id;
-        console.log(ammo_id);
-		if (!ammo_id || !Number(ammo_id)) {
-			console.log('ammo_id参数错误');
+        const log_id = req.params.Log_id;
+        console.log(log_id);
+		if (!log_id || !Number(log_id)) {
+			console.log('log_id参数错误');
 			res.send({
 				status: 0,
 				type: 'ERROR_PARAMS',
-				message: 'ammo_id参数错误',
+				message: 'log_id参数错误',
 			})
 			return
 		}
 		try{
-            const ddd = await ammoModel.findOneAndRemove(ammo_id);
-            console.log(ddd);
+			await logModel.findOneAndRemove({log_id});
 			res.send({
 				status: 1,
 				success: '删除成功',
@@ -186,4 +191,4 @@ class ammo extends BaseComponent{
 	}
 }
 
-export default new ammo()
+export default new Log()

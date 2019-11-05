@@ -1,6 +1,8 @@
 'use strict';
 
 import airplaneModel from '../../models/wcbz/airplane'
+import airplaneDeviceModel from '../../models/wcbz/airplane_device'
+import airplaneAmmoModel from '../../models/wcbz/airplane_ammo'
 import BaseComponent from '../../prototype/baseComponent'
 import formidable from 'formidable'
 import dtime from 'time-formater'
@@ -13,7 +15,8 @@ class Airplane extends BaseComponent{
 		this.getAirplaneCount = this.getAirplaneCount.bind(this);
 		this.getAirplaneDetail = this.getAirplaneDetail.bind(this);
 		this.updateAirplane = this.updateAirplane.bind(this);
-		this.deleteAirplane = this.deleteAirplane.bind(this);
+        this.deleteAirplane = this.deleteAirplane.bind(this);
+
 	}
 	//添加人员
 	async addAirplane(req, res, next){
@@ -67,6 +70,7 @@ class Airplane extends BaseComponent{
                 repairFactory: fields.repairFactory, // 大修次数
                 state: fields.state, // 飞机态势
                 task: fields.task, // 飞机任务态势
+                wqNumber: fields.wqNumber, // 武器发射
 
 			}
 			try{
@@ -185,10 +189,15 @@ class Airplane extends BaseComponent{
                 type,
                 stageUpOrDownTime,
                 repairNumber,
-                repairFactory
+                repairFactory,
+                wqNumber
             } = fields;
             console.log(fields);
+            if (fields.airHour) {
+                await this.updateAirplaneDevice(fields);
+            }
             const create_time = dtime().format('YYYY-MM-DD HH:mm');
+            fields.create_time = create_time;
 			try {
 				let newData;
 				newData = {
@@ -216,7 +225,7 @@ class Airplane extends BaseComponent{
                     repairFactory
                 }
                 console.log("333333", newData);
-				await airplaneModel.findOneAndUpdate({airplane_id}, {$set: newData});
+				await airplaneModel.findOneAndUpdate({airplane_id}, {$set: fields});
 				res.send({
 					status: 1,
 					success: '修改信息成功',
@@ -258,7 +267,37 @@ class Airplane extends BaseComponent{
 				message: '删除失败',
 			})
 		}
-	}
+    }
+
+    async updateAirplaneDevice(data){
+        const datas = {
+            sm: data.airHour
+        }
+        console.log(datas);
+        // const create_time = dtime().format('YYYY-MM-DD HH:mm');
+        try {
+            const airplane = await airplaneModel.findOne({airplane_id: data.airplane_id});
+            const device = await airplaneDeviceModel.findOne({air_code: airplane.code});
+            const ammo = await airplaneAmmoModel.findOne({air_code: airplane.code});
+            console.log(parseInt(ammo.zsm));
+            if (device) {
+                const devicesm = {
+                    sm: parseInt(device.zsm) - parseInt(data.airHour)
+                }
+                const res = await airplaneDeviceModel.updateMany({air_code: airplane.code}, {$set: devicesm});
+            }
+            if (ammo) {
+                const ammosm = {
+                    sm: parseInt(ammo.zsm) - parseInt(data.airHour)
+                }
+                const ress = await airplaneAmmoModel.updateMany({air_code: airplane.code}, {$set: ammosm});
+            }
+            console.log('修改成功');
+        }catch(err){
+            console.log(err.message, err);
+        }
+        console.log("!!!!!!", data);
+    }
 }
 
 export default new Airplane()
