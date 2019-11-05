@@ -33,6 +33,7 @@ class Situation extends BaseComponent{
             }
             console.log(date);
             let totalUpDown = 0;
+            let totalFlight = 0;
             const count = await airplaneModel.count();
             const plan = await planModel.find(date);
             let totalAirplane = 0;
@@ -42,6 +43,7 @@ class Situation extends BaseComponent{
                     totalAirplane = plan[0].airData.length;
                     console.log("xxxxxx", element.upDownNumber);
                     totalUpDown += parseInt(element.upDownNumber);
+                    totalFlight += parseInt(element.flightTime);
                 });
             }
             const users = await airplaneModel.find();
@@ -49,7 +51,7 @@ class Situation extends BaseComponent{
             const array = [];
             let nnnn = 0;
             users.forEach(element => {
-                if (this.toTimeStamp(element.create_time) > this.toTimeStamp(dayTime)) {
+                if (this.toTimeStamp(element.create_time) > this.toTimeStamp(dayTime) && element.enter === '进场') {
                     array.push(element);
                     nnnn += parseInt(element.airUpOrDown);
                 }
@@ -66,7 +68,9 @@ class Situation extends BaseComponent{
                 totalCar: 0,
                 totalTask: 0,
                 enterCar: 0,
-                doneTask: 0
+                doneTask: 0,
+                totalFlyHour: totalFlight,
+                doneFlyHour: 0
             }
 			res.send({
 				status: 1,
