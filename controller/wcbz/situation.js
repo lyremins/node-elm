@@ -47,16 +47,17 @@ class Situation extends BaseComponent{
                 });
             }
             const users = await airplaneModel.find();
-            console.log(users);
+            // console.log(users);
             const array = [];
             let nnnn = 0;
             users.forEach(element => {
                 if (this.toTimeStamp(element.create_time) > this.toTimeStamp(dayTime) && element.enter === '进场') {
+                    console.log(element);
                     array.push(element);
                     nnnn += parseInt(element.airUpOrDown);
                 }
             });
-            console.log(users);
+            // console.log(users);
             // const enter = await this.getAirplaneToPlan();
             const data = {
                 totalAirplane: totalAirplane,
@@ -98,14 +99,19 @@ class Situation extends BaseComponent{
 		try{
             const plan = await planModel.find(date);
 
-            // const users = await airplaneModel.find({})
-            // console.log(users);
+            const users = await airplaneModel.find({})
+            console.log(users);
             const array = [];
-            plan[0].airData.forEach((element,index) => {
-                array.push({
-                    code: element.airName,
-                    upDownNumber: element.upDownNumber
-                })
+            plan[0].airData.forEach((elements,index) => {
+                users.forEach(element => {
+                    if (elements.airName === element.code) {
+                        array.push({
+                            airplane_id: element.airplane_id,
+                            code: elements.airName,
+                            upDownNumber: elements.upDownNumber
+                        })
+                    }
+                });
                 // plan[0].airData[index].code = element.airName;
             });
             console.log(array);
