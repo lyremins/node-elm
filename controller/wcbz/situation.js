@@ -92,67 +92,19 @@ class Situation extends BaseComponent{
             dateTime: dayTime
         }
 		try{
-            const users = await airplaneModel.find({})
-            console.log(users);
+            const plan = await planModel.find(date);
+
+            // const users = await airplaneModel.find({})
+            // console.log(users);
             const array = [];
-            users.forEach(element => {
-                if (this.toTimeStamp(element.create_time) > this.toTimeStamp(dayTime)) {
-                    array.push(element);
-                }
+            plan[0].airData.forEach((element,index) => {
+                array.push({
+                    code: element.airName,
+                    upDownNumber: element.upDownNumber
+                })
+                // plan[0].airData[index].code = element.airName;
             });
-            const data =  [{
-                "airplane_id": 16,
-                "type": "测试11111",
-                "model": "运输机",
-                "code": "A3",
-                "army_id": "03",
-                "factory": "某制造厂",
-                "date": "2019-10-31",
-                "unit": "机务一分队",
-                "airUpOrDown": "1",
-                "yairUpOrDown": "2",
-                "airHour": "6",
-                "yairHour": "2",
-                "stageUpOrDown": "2",
-                "engine_1": "2",
-                "engine_2": "1",
-                "create_time": "2019-11-01 08:49",
-                "stageUpOrDownTime": "2",
-                "repairNumber": "3",
-                "repairFactory": "某修理厂",
-                "state": "完好",
-                "task": "飞行后",
-                "image_path": "",
-                "upDownNumber": 20,
-                "__v": 0,
-                "enter": "进场"
-            },{
-                "airplane_id": 17,
-                "type": "测试2222",
-                "model": "运输机",
-                "code": "A4",
-                "army_id": "03",
-                "factory": "某制造厂",
-                "date": "2019-10-31",
-                "unit": "机务一分队",
-                "airUpOrDown": "1",
-                "yairUpOrDown": "2",
-                "airHour": "6",
-                "yairHour": "2",
-                "stageUpOrDown": "2",
-                "engine_1": "2",
-                "engine_2": "1",
-                "create_time": "2019-11-01 08:49",
-                "stageUpOrDownTime": "2",
-                "repairNumber": "3",
-                "repairFactory": "某修理厂",
-                "state": "完好",
-                "task": "飞行后",
-                "image_path": "",
-                "upDownNumber": 12,
-                "__v": 0,
-                "enter": "进场"
-            }]
+            console.log(array);
 			res.send({
 				status: 1,
 				data: array,
