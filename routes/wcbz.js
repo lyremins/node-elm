@@ -1,6 +1,7 @@
 'use strict';
 
 import express from 'express';
+import User from '../controller/v2/user'
 import Personnel from '../controller/wcbz/personnel'
 import Airplane from '../controller/wcbz/airplane'
 import Equip from '../controller/wcbz/equip'
@@ -23,6 +24,9 @@ import Chat from '../controller/wcbz/chat'
 import Situation from '../controller/wcbz/situation'
 
 const router = express.Router();
+
+
+router.post('/updatePersonOrganiz', User.updatePersonOrganiz);
 
 // 人员管理
 router.post('/addPersonnel', Personnel.addPersonnel);
@@ -115,6 +119,7 @@ router.post('/updateConfig', Config.updateConfig);
 // 组织架构管理
 router.post('/addOrganiz', Organiz.addOrganiz);
 router.get('/getOrganiz', Organiz.getOrganiz);
+router.post('/updateOrganiz', Organiz.updateOrganiz);
 
 // 弹药管理
 router.post('/addAmmo', Ammo.addammo);

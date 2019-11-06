@@ -11,6 +11,7 @@ const organizSchema = new Schema({
     parentID: Number,
     level: Number,
     create_time: String,     // 创建时间
+    organizArray: []
 })
 
 organizSchema.index({id: 1});

@@ -288,7 +288,40 @@ class User extends AddressComponent {
 				message: '上传图片失败'
 			})
 		}
-	}
+    }
+    async updatePersonOrganiz(req, res, next){
+        console.log('32323243');
+        const form = new formidable.IncomingForm();
+		form.parse(req, async (err, fields, files) => {
+			if (err) {
+				console.log('获取信息form出错', err);
+				res.send({
+					status: 0,
+					type: 'ERROR_FORM',
+					message: '表单信息错误',
+				})
+				return
+			}
+			const {
+                user_id,
+                orgname
+            } = fields;
+			try {
+				await UserInfoModel.findOneAndUpdate({user_id}, {$set: fields});
+				res.send({
+					status: 1,
+					success: '修改信息成功',
+				})
+			}catch(err){
+				console.log(err.message, err);
+				res.send({
+					status: 0,
+					type: 'ERROR_UPDATE_RESTAURANT',
+					message: '更新信息失败',
+				})
+			}
+		})
+    }
 	async getUserCity(req, res, next){
 		const cityArr = ['北京', '上海', '深圳', '杭州'];
 		const filterArr = [];

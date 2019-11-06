@@ -35,7 +35,8 @@ class Organiz extends BaseComponent{
                 organiz_id, // 飞机ID
                 organizName: fields.organizName,
                 parentID: fields.parentID,
-                level: fields.level
+                level: fields.level,
+                organizArray: fields.organizArray
 			}
 			try{
 				//保存数据，并增加对应食品种类的数量
@@ -134,7 +135,8 @@ class Organiz extends BaseComponent{
                 organiz_id,
                 organizName,
                 parentID,
-                level
+                level,
+                organizArray
             } = fields;
 			try {
 				let newData;
@@ -144,7 +146,7 @@ class Organiz extends BaseComponent{
                     parentID,
                     level
                 }
-				await organizModel.findOneAndUpdate({organiz_id}, {$set: newData});
+				await organizModel.findOneAndUpdate({organiz_id}, {$set: fields});
 				res.send({
 					status: 1,
 					success: '修改信息成功',

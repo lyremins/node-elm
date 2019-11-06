@@ -22,7 +22,8 @@ const userInfoSchema = new Schema({
 	is_mobile_valid: {type: Boolean, default: true},
 	mobile: {type: String, default: ''},
 	point: {type: Number, default: 0},
-	username: String,
+    username: String,
+    orgname: String,
 	column_desc: {
 		game_desc: {type: String, default: '玩游戏领红包'},
 		game_image_hash: {type: String, default: '05f108ca4e0c543488799f0c7c708cb1jpeg'},
