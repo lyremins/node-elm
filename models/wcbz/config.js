@@ -19,7 +19,8 @@ const configSchema = new Schema({
     pPostModel: String, // 人员职务
     ensureModel: String, // 保障任务
     pStatusModel: String, // 人员工作状态
-    carWorkModel: String  // 车辆工作状态
+    carWorkModel: String,  // 车辆工作状态
+    airTypeModel: String  // 飞机类型
 })
 
 configSchema.index({id: 1});

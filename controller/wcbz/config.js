@@ -29,7 +29,8 @@ class Config extends BaseComponent{
                 pPostModel: fields.pPostModel, // 人员职务
                 ensureModel: fields.ensureModel, // 保障任务
                 pStatusModel: fields.pStatusModel, // 人员工作状态
-                carWorkModel: fields.carWorkModel  // 车辆工作状态
+                carWorkModel: fields.carWorkModel,  // 车辆工作状态
+                airTypeModel: fields.airTypeModel  // 飞机类型
 			}
 			try{
 				//保存数据，并增加对应食品种类的数量
@@ -139,7 +140,8 @@ class Config extends BaseComponent{
                 pPostModel,
                 ensureModel,
                 pStatusModel,
-                carWorkModel
+                carWorkModel,
+                airTypeModel
             } = fields;
 			try {
 				let newData;
