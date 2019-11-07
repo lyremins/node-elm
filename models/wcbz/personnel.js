@@ -24,6 +24,7 @@ const personnelSchema = new Schema({
     enlist: String, // 入伍时间
     school: String, // 毕业院校
     greatTask: String, //执行重大任务
+    duty: String, // 是否在岗
 })
 
 personnelSchema.index({id: 1});

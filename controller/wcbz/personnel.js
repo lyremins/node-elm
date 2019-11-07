@@ -75,6 +75,7 @@ class Personnel extends BaseComponent{
                 enlist: fields.enlist, // 入伍时间
                 school: fields.school, // 毕业院校
                 greatTask: fields.greatTask, //执行重大任务
+                duty: fields.duty, //是否在岗
 			}
 			try{
 				//保存数据，并增加对应食品种类的数量
@@ -183,7 +184,8 @@ class Personnel extends BaseComponent{
                 bindAir,
                 enlist,
                 school,
-                greatTask } = fields;
+                greatTask,
+                duty } = fields;
 			try{
 				let newData;
                 newData = {user_name,sex,phone,type,detachment,
