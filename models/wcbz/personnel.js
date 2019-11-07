@@ -25,6 +25,7 @@ const personnelSchema = new Schema({
     school: String, // 毕业院校
     greatTask: String, //执行重大任务
     duty: String, // 是否在岗
+    state: String, // 进场状态
 })
 
 personnelSchema.index({id: 1});

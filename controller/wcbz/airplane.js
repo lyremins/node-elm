@@ -1,5 +1,6 @@
 'use strict';
 
+import logModel from '../../models/wcbz/log'
 import airplaneModel from '../../models/wcbz/airplane'
 import airplaneDeviceModel from '../../models/wcbz/airplane_device'
 import airplaneAmmoModel from '../../models/wcbz/airplane_ammo'
@@ -18,8 +19,10 @@ class Airplane extends BaseComponent{
         this.deleteAirplane = this.deleteAirplane.bind(this);
 
 	}
-	//添加人员
+	//添加飞机
 	async addAirplane(req, res, next){
+        console.log(req.query);
+
         let airplane_id;
 		try{
             airplane_id = await this.getId('airplane_id');
@@ -33,6 +36,32 @@ class Airplane extends BaseComponent{
 		}
 		const form = new formidable.IncomingForm();
 		form.parse(req, async (err, fields, files) => {
+
+            // 生成日志id  -----开始
+            let log_id;
+            try{
+                log_id = await this.getId('log_id');
+                console.log(log_id);
+            }catch(err){
+                console.log('获取id失败');
+                res.send({
+                    type: 'ERROR_DATA',
+                    message: '获取数据失败'
+                })
+                return
+            }
+            const data = {
+                log_id,
+                user: req.query.uid,
+                action: '添加了1架飞机',
+                create_time: dtime().format('YYYY-MM-DD HH:mm'),
+                data: JSON.stringify(fields)
+            }
+            const log = new logModel(data);
+            await log.save();
+            console.log(JSON.stringify(fields));
+
+            // ----- 结束
 			try{
 				if (!fields.model) {
 					throw new Error('必须填写型号');
@@ -93,10 +122,12 @@ class Airplane extends BaseComponent{
     }
     // 查询人员
 	async getAirplane(req, res, next){
+        console.log(req.query);
+
 		const {limit = 1000, offset = 0} = req.query;
 		try{
             const users = await airplaneModel.find({}, '-_id').limit(Number(limit)).skip(Number(offset));
-            console.log(users);
+            // console.log(users);
 			res.send({
 				status: 1,
 				data: users,
@@ -153,11 +184,42 @@ class Airplane extends BaseComponent{
 			})
 		}
     }
-    // 更新人员
+    // 更新飞机
     async updateAirplane(req, res, next){
         console.log('32323243');
         const form = new formidable.IncomingForm();
 		form.parse(req, async (err, fields, files) => {
+    // 生成日志id  -----开始
+    let log_id;
+    try{
+        log_id = await this.getId('log_id');
+        console.log(log_id);
+    }catch(err){
+        console.log('获取id失败');
+        res.send({
+            type: 'ERROR_DATA',
+            message: '获取数据失败'
+        })
+        return
+    }
+    let action = '';
+    if (fields.moudle === 'upplane') {
+        action = '通过状态上报更新了一架飞机'
+    } else {
+        action = '通过飞机管理更新了一架飞机'
+    }
+    const data = {
+        log_id,
+        user: req.query.uid,
+        action: action,
+        create_time: dtime().format('YYYY-MM-DD HH:mm'),
+        data: JSON.stringify(fields)
+    }
+    const log = new logModel(data);
+    await log.save();
+    console.log(JSON.stringify(fields));
+
+    // ----- 结束
 			if (err) {
 				console.log('获取信息form出错', err);
 				res.send({
@@ -240,11 +302,12 @@ class Airplane extends BaseComponent{
 			}
 		})
     }
-    // 删除人员
+    // 删除飞机
     async deleteAirplane(req, res, next){
-        console.log(req.params);
+        console.log(req.query);
 		const airplane_id = req.params.airplane_id;
 		if (!airplane_id || !Number(airplane_id)) {
+
 			console.log('airplane_id参数错误');
 			res.send({
 				status: 0,

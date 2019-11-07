@@ -4,12 +4,12 @@ import mongoose from 'mongoose'
 
 const Schema = mongoose.Schema;
 
-const faultSchema = new Schema({
-    filed1: String, //
-    filed2: String, //
-    filed3: String,
-    filed4: String,
-    filed5: String,
+const logSchema = new Schema({
+    log_id: String, //
+    user: String, //
+    create_time: String,
+    action: String,
+    data: String,
     filed6: String,
     filed7: String,
 })

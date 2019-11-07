@@ -1,6 +1,7 @@
 'use strict';
 
 import ensureModel from '../../models/wcbz/ensure'
+import vehicleModel from '../../models/wcbz/vehicle'
 import BaseComponent from '../../prototype/baseComponent'
 import formidable from 'formidable'
 import dtime from 'time-formater'
@@ -14,7 +15,12 @@ class Ensure extends BaseComponent{
 		this.getEnsureDetail = this.getEnsureDetail.bind(this);
 		this.updateEnsure = this.updateEnsure.bind(this);
 		this.deleteEnsure = this.deleteEnsure.bind(this);
-	}
+    }
+    toTimeStamp(time) {
+        time = time.replace(/-/g, '/') // 把所有-转化成/
+        let timestamp = new Date(time).getTime()
+        return timestamp
+    }
 	//添加人员
 	async addEnsure(req, res, next){
         let ensure_id;
@@ -157,6 +163,13 @@ class Ensure extends BaseComponent{
     }
     // 删除人员
     async deleteEnsure(req, res, next){
+
+        var day2 = new Date();
+        day2.setTime(day2.getTime());
+        let day = '';
+        day = parseInt(day2.getDate()) < 10 ? '0' + day2.getDate() : day2.getDate()
+        let dayTime = day2.getFullYear()+"-" + (day2.getMonth()+1) + "-" + day;
+
         console.log(req.params);
         const ensure_id = req.params.Ensure_id;
         console.log(ensure_id);
@@ -170,7 +183,28 @@ class Ensure extends BaseComponent{
 			return
 		}
 		try{
+            const plan = await ensureModel.findOne({ensure_id});
+            console.log(plan);
+            const time = plan.filed2;
 			await ensureModel.findOneAndRemove({ensure_id});
+            const users = await vehicleModel.find();
+            if (this.toTimeStamp(time) === this.toTimeStamp(dayTime)) {
+                for (const iterator of users) {
+                    const times = iterator.create_time.substring(0,10);
+                    if (this.toTimeStamp(times) >= this.toTimeStamp(dayTime) && iterator.enter === '进场') {
+                        console.log('enter2');
+                        const data = {
+                            enter: '未进场'
+                        }
+                        let vehicle_id = {
+                            vehicle_id: iterator.vehicle_id
+                        };
+                        console.log(vehicle_id);
+                        const res = await vehicleModel.findOneAndUpdate(vehicle_id, {$set: data});
+                        console.log(res);
+                    }
+                }
+            }
 			res.send({
 				status: 1,
 				success: '删除成功',

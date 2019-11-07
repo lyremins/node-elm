@@ -21,6 +21,7 @@ const vehicleSchema = new Schema({
     state: String, // 车辆状态
     taskState: String, // 车辆任务状态
     enter: String, // 进场状态
+    create_time: String, // 操作时间
 
 
 

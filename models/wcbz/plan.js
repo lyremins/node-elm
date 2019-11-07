@@ -29,6 +29,7 @@ const planSchema = new Schema({
     sceneSubject: String, // 气象科目
     upDownNumber: String, // 起落次数
     flightTime: String, // 飞行时间
+    confirm: String, // 确认
 
 
 })

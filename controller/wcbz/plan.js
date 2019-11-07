@@ -1,6 +1,8 @@
 'use strict';
 
 import planModel from '../../models/wcbz/plan'
+import airplaneModel from '../../models/wcbz/airplane'
+import personnelModel from '../../models/wcbz/personnel'
 import BaseComponent from '../../prototype/baseComponent'
 import formidable from 'formidable'
 import dtime from 'time-formater'
@@ -14,7 +16,12 @@ class Plan extends BaseComponent{
 		this.getPlanDetail = this.getPlanDetail.bind(this);
 		this.updatePlan = this.updatePlan.bind(this);
 		this.deletePlan = this.deletePlan.bind(this);
-	}
+    }
+    toTimeStamp(time) {
+        time = time.replace(/-/g, '/') // 把所有-转化成/
+        let timestamp = new Date(time).getTime()
+        return timestamp
+    }
 	//添加人员
 	async addPlan(req, res, next){
         let plan_id;
@@ -44,7 +51,9 @@ class Plan extends BaseComponent{
                 flightTime: fields.flightTime, // 飞行时间
                 approachTime: fields.approachTime, // 进场时间
                 totalNumber: fields.totalNumber, // 总人数
-                airData:fields.airData
+                airData:fields.airData,
+                confirm:fields.confirm,
+
 			}
 			try{
 				//保存数据，并增加对应食品种类的数量
@@ -151,7 +160,8 @@ class Plan extends BaseComponent{
                 flightTime,
                 approachTime,
                 totalNumber,
-                airData
+                airData,
+                confirm
             } = fields;
 			try {
 				let newData;
@@ -186,7 +196,14 @@ class Plan extends BaseComponent{
     // 删除人员
     async deletePlan(req, res, next){
         console.log(req.params);
-		const plan_id = req.params.plan_id;
+        const plan_id = req.params.plan_id;
+
+        var day2 = new Date();
+        day2.setTime(day2.getTime());
+        let day = '';
+        day = parseInt(day2.getDate()) < 10 ? '0' + day2.getDate() : day2.getDate()
+        let dayTime = day2.getFullYear()+"-" + (day2.getMonth()+1) + "-" + day;
+
 		if (!plan_id || !Number(plan_id)) {
 			console.log('plan_id参数错误');
 			res.send({
@@ -197,7 +214,46 @@ class Plan extends BaseComponent{
 			return
 		}
 		try{
-			await planModel.findOneAndRemove({plan_id});
+            const plan = await planModel.findOne({plan_id});
+            const time = plan.dateTime;
+            await planModel.findOneAndRemove({plan_id});
+            const users = await airplaneModel.find();
+            const personnel = await personnelModel.find();
+            if (this.toTimeStamp(time) === this.toTimeStamp(dayTime)) {
+                for (const iterator of users) {
+                    const times = iterator.create_time.substring(0,10);
+                    if (this.toTimeStamp(times) >= this.toTimeStamp(dayTime) && iterator.enter === '进场') {
+                        console.log('enter2');
+                        const data = {
+                            airUpOrDown: 0,
+                            airHour: 0,
+                            enter: '未进场'
+                        }
+                        let airplaneId = {
+                            airplane_id: iterator.airplane_id
+                        };
+                        console.log(airplaneId);
+
+                        const res = await airplaneModel.findOneAndUpdate(airplaneId, {$set: data});
+                        console.log(res);
+                    }
+                }
+                for (const iterator of personnel) {
+                    const times = iterator.create_time.substring(0,10);
+                    if (this.toTimeStamp(times) >= this.toTimeStamp(dayTime) && iterator.state === '进场') {
+                        const data = {
+                            state: '未进场'
+                        }
+                        let person_id = {
+                            person_id: iterator.person_id
+                        };
+                        console.log(person_id);
+
+                        const res = await personnelModel.findOneAndUpdate(person_id, {$set: data});
+                        console.log(res);
+                    }
+                }
+            }
 			res.send({
 				status: 1,
 				success: '删除成功',

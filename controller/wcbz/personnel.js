@@ -160,6 +160,7 @@ class Personnel extends BaseComponent{
     async updatePersonnel(req, res, next){
         const form = new formidable.IncomingForm();
 		form.parse(req, async (err, fields, files) => {
+            console.log(fields);
 			if (err) {
 				console.log('获取信息form出错', err);
 				res.send({
@@ -185,7 +186,9 @@ class Personnel extends BaseComponent{
                 enlist,
                 school,
                 greatTask,
-                duty } = fields;
+                duty,
+                state} = fields;
+                fields.create_time = dtime().format('YYYY-MM-DD HH:mm');
 			try{
 				let newData;
                 newData = {user_name,sex,phone,type,detachment,

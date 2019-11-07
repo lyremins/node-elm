@@ -2,6 +2,9 @@
 
 import airplaneModel from '../../models/wcbz/airplane'
 import planModel from '../../models/wcbz/plan'
+import ensureModel from '../../models/wcbz/ensure'
+import vehicleModel from '../../models/wcbz/vehicle'
+import personnelModel from '../../models/wcbz/personnel'
 import BaseComponent from '../../prototype/baseComponent'
 import { SSL_OP_SSLEAY_080_CLIENT_DH_BUG } from 'constants';
 
@@ -21,57 +24,85 @@ class Situation extends BaseComponent{
     // 查询人员条数
     async getSituation(req, res, next){
 		try{
-            console.log('222');
             var day2 = new Date();
             day2.setTime(day2.getTime());
             let day = '';
             day = parseInt(day2.getDate()) < 10 ? '0' + day2.getDate() : day2.getDate()
             let dayTime = day2.getFullYear()+"-" + (day2.getMonth()+1) + "-" + day;
-            console.log(dayTime);
             const date = {
                 dateTime: dayTime
             }
-            console.log(date);
             let totalUpDown = 0;
             let totalFlight = 0;
+            let totalPerson = 0;
             const count = await airplaneModel.count();
             const plan = await planModel.find(date);
             let totalAirplane = 0;
-            console.log('6666666', plan);
             if (plan.length) {
                 plan[0].airData.forEach(element => {
                     totalAirplane = plan[0].airData.length;
-                    console.log("xxxxxx", element.upDownNumber);
                     totalUpDown += parseInt(element.upDownNumber);
                     totalFlight += parseInt(element.flightTime);
                 });
             }
             const users = await airplaneModel.find();
-            // console.log(users);
-            const array = [];
-            let nnnn = 0;
-            users.forEach(element => {
-                if (this.toTimeStamp(element.create_time) > this.toTimeStamp(dayTime) && element.enter === '进场') {
-                    console.log(element);
-                    array.push(element);
-                    nnnn += parseInt(element.airUpOrDown);
+            const ensure = await ensureModel.find();
+            const vehicle = await vehicleModel.find();
+            const personnel = await personnelModel.find();
+            let vehicle_enter = 0;
+            vehicle.forEach(element => {
+                if (this.toTimeStamp(element.create_time) >= this.toTimeStamp(dayTime) && element.enter === '进场') {
+                    vehicle_enter +=1;
                 }
             });
+
+            let ensure_task = 0;
+            let ensure_car = 0;
+            ensure.forEach(element => {
+                if (this.toTimeStamp(element.filed2) >= this.toTimeStamp(dayTime)) {
+                    ensure_task += 1;
+                    element.filed3.forEach(e => {
+                        e.car.forEach(ee => {
+                            ensure_car += parseInt(ee.number);
+                        });
+                    });
+                }
+             });
             // console.log(users);
             // const enter = await this.getAirplaneToPlan();
+            let totalN = 0;
+            let nnnn = 0;
+            let totalAirHour = 0;
+            const array = [];
+            if (plan.length) {
+                totalN = plan[0].totalNumber;
+                users.forEach(element => {
+                    if (this.toTimeStamp(element.create_time) >= this.toTimeStamp(dayTime) && element.enter === '进场') {
+                        array.push(element);
+                        nnnn += parseInt(element.airUpOrDown);
+                        totalAirHour += parseInt(element.airHour);
+                    }
+                });
+            }
+            let pEnter = 0;
+            personnel.forEach(element => {
+                if (this.toTimeStamp(element.create_time) >= this.toTimeStamp(dayTime) && element.state === '进场') {
+                    pEnter += 1;
+                }
+            });
             const data = {
                 totalAirplane: totalAirplane,
                 enterAirplane: array.length,
                 totalUpDown: totalUpDown,
                 doneUpdown: nnnn,
-                enterPerson: 0,
-                donePerson: 0,
-                totalCar: 0,
-                totalTask: 0,
-                enterCar: 0,
+                enterPerson: totalN,
+                donePerson: pEnter,
+                totalCar: ensure_car, // 总保障车辆数
+                totalTask: ensure_task,
+                enterCar: vehicle_enter,
                 doneTask: 0,
                 totalFlyHour: totalFlight,
-                doneFlyHour: 0
+                doneFlyHour: totalAirHour
             }
 			res.send({
 				status: 1,
@@ -102,18 +133,21 @@ class Situation extends BaseComponent{
             const users = await airplaneModel.find({})
             console.log(users);
             const array = [];
-            plan[0].airData.forEach((elements,index) => {
-                users.forEach(element => {
-                    if (elements.airName === element.code) {
-                        array.push({
-                            airplane_id: element.airplane_id,
-                            code: elements.airName,
-                            upDownNumber: elements.upDownNumber
-                        })
-                    }
+            console.log("!!!!!!!!!", plan.length);
+            if (plan.length) {
+                plan[0].airData.forEach((elements,index) => {
+                    users.forEach(element => {
+                        if (elements.airName === element.code) {
+                            array.push({
+                                airplane_id: element.airplane_id,
+                                code: elements.airName,
+                                upDownNumber: elements.upDownNumber
+                            })
+                        }
+                    });
+                    // plan[0].airData[index].code = element.airName;
                 });
-                // plan[0].airData[index].code = element.airName;
-            });
+            }
             console.log(array);
 			res.send({
 				status: 1,
@@ -129,10 +163,36 @@ class Situation extends BaseComponent{
 		}
     }
     async getCarToEnsure(req, res, next){
-		const {limit = 1000, offset = 0} = req.query;
+        const {limit = 1000, offset = 0} = req.query;
+        var day2 = new Date();
+        day2.setTime(day2.getTime());
+        let day = '';
+        day = parseInt(day2.getDate()) < 10 ? '0' + day2.getDate() : day2.getDate()
+        let dayTime = day2.getFullYear()+"-" + (day2.getMonth()+1) + "-" + day;
 		try{
-            const users = await airplaneModel.find({}, '-_id').limit(Number(limit)).skip(Number(offset));
-            console.log(users);
+            const ensure = await ensureModel.find({}, '-_id').limit(Number(limit)).skip(Number(offset));
+            const carArray = []
+            ensure.forEach(element => {
+                if (this.toTimeStamp(element.filed2) >= this.toTimeStamp(dayTime)) {
+                    console.log(element);
+                    element.filed3.forEach(e => {
+                        e.car.forEach(ee => {
+                            console.log(ee);
+                            carArray.push(ee)
+                        });
+                    });
+                }
+             });
+             console.log(carArray);
+             const newArray = [];
+             const vehicle = await vehicleModel.find();
+             vehicle.forEach(element => {
+                carArray.forEach(type => {
+                    if (element.model === type.name) {
+                        newArray.push(element);
+                    }
+                });
+             });
             const data =  [{
                 "vehicle_id": 1,
                 "model": "冷气车",
@@ -153,7 +213,7 @@ class Situation extends BaseComponent{
             }]
 			res.send({
 				status: 1,
-				data: data,
+				data: newArray,
 			})
 		}catch(err){
 			console.log('获取飞机列表数据失败', err);

@@ -58,7 +58,8 @@ class Vehicle extends BaseComponent{
                 taskState: fields.taskState, // 车辆任务状态
                 state: fields.state, // 车辆任务状态
                 mileage: fields.mileage, // 车辆总里程
-                enter: fields.enter // 进场状态
+                enter: fields.enter, // 进场状态
+                create_time: dtime().format('YYYY-MM-DD HH:mm')
 			}
 			try{
 				//保存数据，并增加对应食品种类的数量
@@ -144,6 +145,7 @@ class Vehicle extends BaseComponent{
     async updateVehicle(req, res, next){
         const form = new formidable.IncomingForm();
 		form.parse(req, async (err, fields, files) => {
+            console.log(fields);
 			if (err) {
 				console.log('获取信息form出错', err);
 				res.send({
@@ -170,6 +172,8 @@ class Vehicle extends BaseComponent{
                 taskState,
                 enter
             } = fields;
+            const create_time = dtime().format('YYYY-MM-DD HH:mm');
+            fields.create_time = create_time;
 			try {
 				let newData;
 				newData = {

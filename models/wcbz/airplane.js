@@ -28,6 +28,7 @@ const airplaneSchema = new Schema({
     task: String, // 任务态势
     image_path: { type: String, default: "" }, // 飞机图片
     create_time: String, // 操作时间
+    upload_time: { type: Number, default: 0 }, // 上报时间
     enter: String, // 进场状态
     wqNumber: Number // 武器发射
 

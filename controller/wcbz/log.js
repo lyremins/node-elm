@@ -35,18 +35,9 @@ class Log extends BaseComponent{
 			const opening_hours = fields.startTime&&fields.endTime? fields.startTime + '/' + fields.endTime : "8:30/20:30";
 			const newLog = {
                 log_id,
-				filed1: fields.filed1,
-                filed2: fields.filed2,
-                filed3: fields.filed3,
-                filed4: fields.filed4,
-                filed5: fields.filed5,
-                filed6: fields.filed6,
-                filed7: fields.filed7,
-                filed8: fields.filed8,
-                filed9: fields.filed9,
-                filed10: fields.filed10,
-                filed11: fields.filed11,
-                filed12: fields.filed12,
+				user: fields.user,
+				action: fields.action,
+				data: fields.data,
                 create_time: dtime().format('YYYY-MM-DD HH:mm')
 			}
 			try{
@@ -77,11 +68,11 @@ class Log extends BaseComponent{
 				data: users,
 			})
 		}catch(err){
-			console.log('获取用户列表数据失败', err);
+			console.log('获取日志数据失败', err);
 			res.send({
 				status: 0,
 				type: 'GET_DATA_ERROR',
-				message: '获取用户列表数据失败'
+				message: '获取日志数据失败'
 			})
 		}
     }
