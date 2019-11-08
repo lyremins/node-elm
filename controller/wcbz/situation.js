@@ -98,9 +98,9 @@ class Situation extends BaseComponent{
                 enterPerson: totalN,
                 donePerson: pEnter,
                 totalCar: ensure_car, // 总保障车辆数
-                totalTask: ensure_task,
-                enterCar: vehicle_enter,
-                doneTask: 0,
+                totalTask: ensure_task,   // 改成总保障飞机数
+                enterCar: vehicle_enter,  // 进场车辆数
+                doneTask: 0, // 改成已进场飞机数
                 totalFlyHour: totalFlight,
                 doneFlyHour: totalAirHour
             }
@@ -214,6 +214,31 @@ class Situation extends BaseComponent{
 			res.send({
 				status: 1,
 				data: newArray,
+			})
+		}catch(err){
+			console.log('获取飞机列表数据失败', err);
+			res.send({
+				status: 0,
+				type: 'GET_DATA_ERROR',
+				message: '获取飞机列表数据失败'
+			})
+		}
+    }
+    async getPlanToToday(req, res, next){
+        const {limit = 1000, offset = 0} = req.query;
+        var day2 = new Date();
+        day2.setTime(day2.getTime());
+        let day = '';
+        day = parseInt(day2.getDate()) < 10 ? '0' + day2.getDate() : day2.getDate()
+        let dayTime = day2.getFullYear()+"-" + (day2.getMonth()+1) + "-" + day;
+        const date = {
+            dateTime: dayTime
+        }
+        try{
+            const plan = await planModel.find(date);
+			res.send({
+				status: 1,
+				data: plan,
 			})
 		}catch(err){
 			console.log('获取飞机列表数据失败', err);

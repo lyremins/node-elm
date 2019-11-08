@@ -39,9 +39,9 @@ router.delete('/deletePersonnel/:person_id', Personnel.deletePersonnel);
 
 // 聊天管理
 router.post('/addChat', Chat.addChat);
-router.get('/getChat', Chat.getChat);
+router.get('/getChat', Chat.getChatDetail);
 router.get('/getChatCount', Chat.getChatCount);
-router.get('/getChatDetail', Chat.getChatDetail);
+router.get('/getChatDetail', Chat.getChat);
 router.delete('/deleteChat/:chat_id', Chat.deleteChat);
 
 // 飞机管理
@@ -157,6 +157,7 @@ router.delete('/deleteAirplaneCar/:AirplaneCar_id', AirplaneCar.deleteAirplaneCa
 router.get('/getSituation', Situation.getSituation);
 router.get('/getAirplaneToPlan', Situation.getAirplaneToPlan);
 router.get('/getCarToEnsure', Situation.getCarToEnsure);
+router.get('/getPlanToToday', Situation.getPlanToToday);
 
 // 日志
 router.post('/addLog', Log.addLog);
