@@ -60,11 +60,13 @@ class Situation extends BaseComponent{
             let ensure_car = 0;
             ensure.forEach(element => {
                 if (this.toTimeStamp(element.filed2) >= this.toTimeStamp(dayTime)) {
-                    ensure_task += 1;
                     element.filed3.forEach(e => {
                         e.car.forEach(ee => {
                             ensure_car += parseInt(ee.number);
                         });
+                        e.airplane.forEach(ss => {
+                            ensure_task +=1
+                        })
                     });
                 }
              });
@@ -141,7 +143,8 @@ class Situation extends BaseComponent{
                             array.push({
                                 airplane_id: element.airplane_id,
                                 code: elements.airName,
-                                upDownNumber: elements.upDownNumber
+                                upDownNumber: elements.upDownNumber,
+                                approachTime: elements.approachTime
                             })
                         }
                     });

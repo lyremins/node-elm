@@ -20,7 +20,9 @@ const configSchema = new Schema({
     ensureModel: String, // 保障任务
     pStatusModel: String, // 人员工作状态
     carWorkModel: String,  // 车辆工作状态
-    airTypeModel: String  // 飞机类型
+    airTypeModel: String,  // 飞机类型
+    faultMethodModel: String,  // 故障排除方法
+
 })
 
 configSchema.index({id: 1});

@@ -30,6 +30,7 @@ class Fault extends BaseComponent{
                 deviceName: fields.deviceName, // 故障件名称,
                 desc: fields.desc, // 故障描述
                 factory: fields.factory, // 厂家
+                create_time: dtime().format('YYYY-MM-DD HH:mm')
 			}
 			try{
 				//保存数据，并增加对应食品种类的数量

@@ -16,10 +16,7 @@ const planSchema = new Schema({
         sceneSubject: String, // 气象科目
         upDownNumber: String, // 起落次数
         flightTime: String, // 飞行时间
-        xd:[{
-            name: String,
-            number: Number
-        }]
+        xd:[], // 携弹
     }],
     airName: String,
     vehicleName: String,

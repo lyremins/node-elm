@@ -19,6 +19,7 @@ const faultSchema = new Schema({
     deviceName: String, // 故障件名称,
     desc: String, // 故障描述
     factory: String, // 厂家
+    create_time: String, // 创建时间
 })
 
 faultSchema.index({id: 1});
