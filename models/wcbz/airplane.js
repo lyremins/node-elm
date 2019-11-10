@@ -30,7 +30,8 @@ const airplaneSchema = new Schema({
     create_time: String, // 操作时间
     upload_time: { type: Number, default: 0 }, // 上报时间
     enter: String, // 进场状态
-    wqNumber: Number // 武器发射
+    wqNumber: Number, // 武器发射
+    wq: []
 
 
 })

@@ -1,6 +1,7 @@
 'use strict';
 
 import airplaneModel from '../../models/wcbz/airplane'
+import airplaneAmmoModel from '../../models/wcbz/airplane_ammo'
 import planModel from '../../models/wcbz/plan'
 import ensureModel from '../../models/wcbz/ensure'
 import vehicleModel from '../../models/wcbz/vehicle'
@@ -133,6 +134,7 @@ class Situation extends BaseComponent{
             const plan = await planModel.find(date);
 
             const users = await airplaneModel.find({})
+            const ammo = await airplaneAmmoModel.find({})
             console.log(users);
             const array = [];
             console.log("!!!!!!!!!", plan.length);
@@ -151,7 +153,18 @@ class Situation extends BaseComponent{
                     // plan[0].airData[index].code = element.airName;
                 });
             }
-            console.log(array);
+            array.forEach(element => {
+                let data = [];
+                ammo.forEach(ammo => {
+                    // console.log(element.code);
+                    // console.log(ammo.air_code);
+                    if (element.code === ammo.air_code) {
+                        console.log(ammo);
+                        data.push(ammo);
+                    }
+                });
+                element.ammoData = data;
+            });
 			res.send({
 				status: 1,
 				data: array,
