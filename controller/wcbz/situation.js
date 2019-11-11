@@ -178,7 +178,8 @@ class Situation extends BaseComponent{
                                 airplane_id: ee.airplane_id,
                                 code: ee.code,
                                 upDownNumber: ee.airUpOrDown,
-                                approachTime: ee.approachTime
+                                approachTime: ee.approachTime,
+                                name: 'A001-飞行计划'
                             })
                         });
                     });
@@ -197,6 +198,7 @@ class Situation extends BaseComponent{
                                 code: elements.airName,
                                 upDownNumber: elements.upDownNumber,
                                 approachTime: elements.approachTime,
+                                name: 'A001-飞行计划',
                                 ammoData: elements.xd
                             })
                         }
