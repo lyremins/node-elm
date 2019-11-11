@@ -3,6 +3,7 @@
 import planModel from '../../models/wcbz/plan'
 import airplaneModel from '../../models/wcbz/airplane'
 import personnelModel from '../../models/wcbz/personnel'
+import WqStateModel from '../../models/wcbz/wqState'
 import BaseComponent from '../../prototype/baseComponent'
 import formidable from 'formidable'
 import dtime from 'time-formater'
@@ -138,6 +139,12 @@ class Plan extends BaseComponent{
     async updatePlan(req, res, next){
         const form = new formidable.IncomingForm();
 		form.parse(req, async (err, fields, files) => {
+            var day2 = new Date();
+            day2.setTime(day2.getTime());
+            let day = '';
+            day = parseInt(day2.getDate()) < 10 ? '0' + day2.getDate() : day2.getDate()
+            let dayTime = day2.getFullYear()+"-" + (day2.getMonth()+1) + "-" + day;
+
 			if (err) {
 				console.log('获取信息form出错', err);
 				res.send({
@@ -178,7 +185,50 @@ class Plan extends BaseComponent{
                     approachTime,
                     totalNumber
                 }
-				await planModel.findOneAndUpdate({plan_id}, {$set: fields});
+                await planModel.findOneAndUpdate({plan_id}, {$set: fields});
+                const plan = await planModel.findOne({plan_id});
+                const time = plan.dateTime;
+                const users = await airplaneModel.find();
+                const personnel = await personnelModel.find();
+                if (!fields.confirm) {
+                    if (this.toTimeStamp(time) === this.toTimeStamp(dayTime)) {
+                        for (const iterator of users) {
+                            const times = iterator.create_time.substring(0,10);
+                            if (this.toTimeStamp(times) >= this.toTimeStamp(dayTime) && iterator.enter === '进场') {
+                                console.log('enter2');
+                                const data = {
+                                    airUpOrDown: 0,
+                                    airHour: 0,
+                                    enter: '未进场'
+                                }
+                                let airplaneId = {
+                                    airplane_id: iterator.airplane_id
+                                };
+                                console.log(airplaneId);
+
+                                const res = await airplaneModel.findOneAndUpdate(airplaneId, {$set: data});
+                                console.log(res);
+                            }
+                        }
+                        for (const iterator of personnel) {
+                            const times = iterator.create_time.substring(0,10);
+                            if (this.toTimeStamp(times) >= this.toTimeStamp(dayTime) && iterator.state === '进场') {
+                                const data = {
+                                    state: '未进场'
+                                }
+                                let person_id = {
+                                    person_id: iterator.person_id
+                                };
+                                console.log(person_id);
+
+                                const res = await personnelModel.findOneAndUpdate(person_id, {$set: data});
+                                console.log(res);
+                            }
+                        }
+
+                        await WqStateModel.remove({'create_time' : {"$gte" : dayTime}});
+                    }
+                }
 				res.send({
 					status: 1,
 					success: '修改信息成功',
@@ -195,6 +245,7 @@ class Plan extends BaseComponent{
     }
     // 删除人员
     async deletePlan(req, res, next){
+
         console.log(req.params);
         const plan_id = req.params.plan_id;
 
@@ -253,6 +304,9 @@ class Plan extends BaseComponent{
                         console.log(res);
                     }
                 }
+
+                await WqStateModel.remove({'create_time' : {"$gte" : dayTime}});
+
             }
 			res.send({
 				status: 1,

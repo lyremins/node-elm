@@ -12,7 +12,8 @@ const pammoSchema = new Schema({
     filed4: String,
     filed5: String,
     filed6: String, // 总挂飞小时
-    filed7: String
+    filed7: String,
+    air_type: String, // 飞机类型
 
 })
 

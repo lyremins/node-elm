@@ -23,6 +23,8 @@ import AirplaneCar from '../controller/wcbz/airplane_car'
 import Chat from '../controller/wcbz/chat'
 import Situation from '../controller/wcbz/situation'
 import Log from '../controller/wcbz/log'
+import Airplanestate from '../controller/wcbz/airplanestate'
+import WqState  from '../controller/wcbz/wqState'
 
 const router = express.Router();
 
@@ -158,6 +160,9 @@ router.get('/getSituation', Situation.getSituation);
 router.get('/getAirplaneToPlan', Situation.getAirplaneToPlan);
 router.get('/getCarToEnsure', Situation.getCarToEnsure);
 router.get('/getPlanToToday', Situation.getPlanToToday);
+
+router.get('/getAirplaneState', Airplanestate.getAirplaneState);
+router.get('/getWqState', WqState.getWqState);
 
 // 日志
 router.post('/addLog', Log.addLog);

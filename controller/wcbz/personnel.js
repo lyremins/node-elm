@@ -1,6 +1,7 @@
 'use strict';
 
 import personnelModel from '../../models/wcbz/personnel'
+import airplaneModel from '../../models/wcbz/airplane'
 import BaseComponent from '../../prototype/baseComponent'
 import formidable from 'formidable'
 import dtime from 'time-formater'
@@ -76,7 +77,15 @@ class Personnel extends BaseComponent{
                 school: fields.school, // 毕业院校
                 greatTask: fields.greatTask, //执行重大任务
                 duty: fields.duty, //是否在岗
-			}
+            }
+            // const airplane = await airplaneModel.find();
+            // airplane.forEach(element => {
+            //     console.log(element);
+            //     if (element.airplane_id === fields.bindAir) {
+            //         console.log("elementelement", element.airplane_id);
+            //         fields.bindAir = element.code;
+            //     }
+            // });
 			try{
 				//保存数据，并增加对应食品种类的数量
 				const personnel = new personnelModel(newPersonnel);
@@ -189,6 +198,7 @@ class Personnel extends BaseComponent{
                 duty,
                 state} = fields;
                 fields.create_time = dtime().format('YYYY-MM-DD HH:mm');
+                console.log(fields);
 			try{
 				let newData;
                 newData = {user_name,sex,phone,type,detachment,

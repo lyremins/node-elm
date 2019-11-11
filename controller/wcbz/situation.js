@@ -17,6 +17,9 @@ class Situation extends BaseComponent{
 		this.getCarToEnsure = this.getCarToEnsure.bind(this);
 
     }
+    distinct(a, b) {
+        return Array.from(new Set([...a, ...b]))
+    }
     toTimeStamp(time) {
         time = time.replace(/-/g, '/') // 把所有-转化成/
         let timestamp = new Date(time).getTime()
@@ -59,31 +62,63 @@ class Situation extends BaseComponent{
 
             let ensure_task = 0;
             let ensure_car = 0;
+            const car_enter = [];
+            let ensure_ccc = [];
+            let ensure_eee = [];
             ensure.forEach(element => {
                 if (this.toTimeStamp(element.filed2) >= this.toTimeStamp(dayTime)) {
                     element.filed3.forEach(e => {
+                        if (e.content === '飞行计划保障') {
+                           e.plan.forEach(p => {
+                                console.log("ppppp",p.airData.length);
+                                ensure_task += p.airData.length;
+                                p.airData.forEach(ppp => {
+                                    ensure_ccc.push(ppp.airName);
+                                });
+                           });
+                        }
                         e.car.forEach(ee => {
-                            ensure_car += parseInt(ee.number);
+                            console.log(ee);
+                            car_enter[ee.name] || (car_enter[ee.name] = []);
+                            car_enter[ee.name].push(ee);
                         });
                         e.airplane.forEach(ss => {
-                            ensure_task +=1
+                            ensure_task +=1;
+                            console.log('sssssssss',ensure_task);
+                            if (e.content !== '飞行计划保障') {
+                                ensure_ccc.push(ss.code);
+                                ensure_eee.push(ss.code);
+                            }
                         })
                     });
                 }
              });
+             console.log("ensure_ccc",ensure_ccc);
+             Object.keys(car_enter).forEach((key) => {
+                ensure_car ++;
+            });
+
+            //  console.log("222222", car_enter.length);
             // console.log(users);
             // const enter = await this.getAirplaneToPlan();
             let totalN = 0;
             let nnnn = 0;
             let totalAirHour = 0;
             const array = [];
-            if (plan.length) {
-                totalN = plan[0].totalNumber;
+            let carToEnterToAir = 0;
+            if (plan.length || ensure.length) {
+                if (plan.length) {
+                    totalN = plan[0].totalNumber;
+                }
                 users.forEach(element => {
-                    if (this.toTimeStamp(element.create_time) >= this.toTimeStamp(dayTime) && element.enter === '进场') {
+                    if (!ensure_eee.includes(element.code) && this.toTimeStamp(element.create_time) >= this.toTimeStamp(dayTime) && element.enter === '进场') {
                         array.push(element);
+                        console.log("element", element);
                         nnnn += parseInt(element.airUpOrDown);
                         totalAirHour += parseInt(element.airHour);
+                    }
+                    if (ensure_ccc.includes(element.code) && element.enter === '进场' ) {
+                        carToEnterToAir ++;
                     }
                 });
             }
@@ -103,7 +138,7 @@ class Situation extends BaseComponent{
                 totalCar: ensure_car, // 总保障车辆数
                 totalTask: ensure_task,   // 改成总保障飞机数
                 enterCar: vehicle_enter,  // 进场车辆数
-                doneTask: 0, // 改成已进场飞机数
+                doneTask: carToEnterToAir, // 改成已进场飞机数
                 totalFlyHour: totalFlight,
                 doneFlyHour: totalAirHour
             }
@@ -131,13 +166,28 @@ class Situation extends BaseComponent{
             dateTime: dayTime
         }
 		try{
+            const array = [];
             const plan = await planModel.find(date);
+            const ensure = await ensureModel.find();
+            console.log("ensure",ensure);
+            ensure.forEach(element => {
+                if (this.toTimeStamp(element.filed2) >= this.toTimeStamp(dayTime)) {
+                    element.filed3.forEach(e => {
+                        e.airplane.forEach(ee => {
+                            array.push({
+                                airplane_id: ee.airplane_id,
+                                code: ee.code,
+                                upDownNumber: ee.airUpOrDown,
+                                approachTime: ee.approachTime
+                            })
+                        });
+                    });
+                }
+            });
 
             const users = await airplaneModel.find({})
             const ammo = await airplaneAmmoModel.find({})
-            console.log(users);
-            const array = [];
-            console.log("!!!!!!!!!", plan.length);
+
             if (plan.length) {
                 plan[0].airData.forEach((elements,index) => {
                     users.forEach(element => {
@@ -146,25 +196,26 @@ class Situation extends BaseComponent{
                                 airplane_id: element.airplane_id,
                                 code: elements.airName,
                                 upDownNumber: elements.upDownNumber,
-                                approachTime: elements.approachTime
+                                approachTime: elements.approachTime,
+                                ammoData: elements.xd
                             })
                         }
                     });
                     // plan[0].airData[index].code = element.airName;
                 });
             }
-            array.forEach(element => {
-                let data = [];
-                ammo.forEach(ammo => {
-                    // console.log(element.code);
-                    // console.log(ammo.air_code);
-                    if (element.code === ammo.air_code) {
-                        console.log(ammo);
-                        data.push(ammo);
-                    }
-                });
-                element.ammoData = data;
-            });
+            // array.forEach(element => {
+            //     let data = [];
+            //     ammo.forEach(ammo => {
+            //         // console.log(element.code);
+            //         // console.log(ammo.air_code);
+            //         if (element.code === ammo.air_code) {
+            //             console.log(ammo);
+            //             data.push(ammo);
+            //         }
+            //     });
+            //     element.ammoData = data;
+            // });
 			res.send({
 				status: 1,
 				data: array,
@@ -193,18 +244,19 @@ class Situation extends BaseComponent{
                     console.log(element);
                     element.filed3.forEach(e => {
                         e.car.forEach(ee => {
-                            console.log(ee);
-                            carArray.push(ee)
+                            if(!carArray.includes(ee.name)){ // 如果bArr新数组包含当前循环item
+                                carArray.push(ee.name);
+                               }
                         });
                     });
                 }
              });
-             console.log(carArray);
+             console.log("2222222", carArray);
              const newArray = [];
              const vehicle = await vehicleModel.find();
              vehicle.forEach(element => {
                 carArray.forEach(type => {
-                    if (element.model === type.name) {
+                    if (element.name === type) {
                         newArray.push(element);
                     }
                 });

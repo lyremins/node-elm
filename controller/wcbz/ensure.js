@@ -2,6 +2,7 @@
 
 import ensureModel from '../../models/wcbz/ensure'
 import vehicleModel from '../../models/wcbz/vehicle'
+import airplaneModel from '../../models/wcbz/airplane'
 import BaseComponent from '../../prototype/baseComponent'
 import formidable from 'formidable'
 import dtime from 'time-formater'
@@ -184,7 +185,7 @@ class Ensure extends BaseComponent{
 		}
 		try{
             const plan = await ensureModel.findOne({ensure_id});
-            console.log(plan);
+
             const time = plan.filed2;
 			await ensureModel.findOneAndRemove({ensure_id});
             const users = await vehicleModel.find();
@@ -202,6 +203,18 @@ class Ensure extends BaseComponent{
                         console.log(vehicle_id);
                         const res = await vehicleModel.findOneAndUpdate(vehicle_id, {$set: data});
                         console.log(res);
+                    }
+                }
+                for (const iterator of plan.filed3) {
+                    for (const ii of iterator.airplane) {
+                        console.log(ii.airplane_id)
+                        const data = {
+                            enter: '未进场'
+                        }
+                        let airplane_id = {
+                            airplane_id: ii.vehicle_id
+                        };
+                        const res = await airplaneModel.findOneAndUpdate(airplane_id, {$set: data});
                     }
                 }
             }

@@ -2,6 +2,8 @@
 
 import logModel from '../../models/wcbz/log'
 import airplaneModel from '../../models/wcbz/airplane'
+import airplaneStateModel from '../../models/wcbz/airplaneState'
+import wqStateModel from '../../models/wcbz/wqState'
 import airplaneDeviceModel from '../../models/wcbz/airplane_device'
 import airplaneAmmoModel from '../../models/wcbz/airplane_ammo'
 import BaseComponent from '../../prototype/baseComponent'
@@ -189,6 +191,11 @@ class Airplane extends BaseComponent{
         console.log('32323243');
         const form = new formidable.IncomingForm();
 		form.parse(req, async (err, fields, files) => {
+        const airplane = await airplaneModel.findOne({
+            airplane_id: fields.airplane_id
+        });
+        console.log("airplane",fields.airplane_id);
+        console.log("airplane",airplane);
     // 生成日志id  -----开始
     let log_id;
     try{
@@ -220,6 +227,28 @@ class Airplane extends BaseComponent{
     console.log(JSON.stringify(fields));
 
     // ----- 结束
+    if (fields.moudle === 'upplane') {
+        const newAirplaneState = {
+            user: req.query.uid,
+            create_time: dtime().format('YYYY-MM-DD HH:mm'),
+            airData: fields
+        }
+        const airplaneState = new airplaneStateModel(newAirplaneState);
+        await airplaneState.save();
+
+        if (fields.wq) {
+            const newWqState = {
+                name: `${airplane.code}`,
+                user: req.query.uid,
+                create_time: dtime().format('YYYY-MM-DD HH:mm'),
+                fsData: JSON.parse(fields.wq),
+                airData: fields
+            }
+            const wqState = new wqStateModel(newWqState);
+            await wqState.save();
+        }
+
+    }
 			if (err) {
 				console.log('获取信息form出错', err);
 				res.send({
@@ -286,8 +315,11 @@ class Airplane extends BaseComponent{
                     repairNumber,
                     repairFactory
                 }
-                console.log("333333", newData);
-				await airplaneModel.findOneAndUpdate({airplane_id}, {$set: fields});
+                console.log("333333", fields);
+                let airplane_id = {
+                    airplane_id: fields.airplane_id
+                };
+				await airplaneModel.findOneAndUpdate(airplane_id, {$set: fields});
 				res.send({
 					status: 1,
 					success: '修改信息成功',

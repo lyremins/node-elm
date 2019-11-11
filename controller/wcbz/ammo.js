@@ -41,6 +41,7 @@ class ammo extends BaseComponent{
                 filed5: fields.filed5,
                 filed6: fields.filed6,
                 filed7: fields.filed7,
+                air_type: fields.air_type,
                 create_time: dtime().format('YYYY-MM-DD HH:mm')
 			}
 			try{
@@ -135,7 +136,7 @@ class ammo extends BaseComponent{
 				})
 				return
 			}
-			const {ammo_id,filed1,filed2,filed3,filed4,filed5,filed6,filed7} = fields;
+			const {ammo_id,filed1,filed2,filed3,filed4,filed5,filed6,filed7,air_type} = fields;
 			try{
 				let newData;
 				newData = {filed1,filed2,filed3,filed4,filed5,filed6,filed7}
