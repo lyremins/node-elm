@@ -24,7 +24,7 @@ import Chat from '../controller/wcbz/chat'
 import Situation from '../controller/wcbz/situation'
 import Log from '../controller/wcbz/log'
 import Airplanestate from '../controller/wcbz/airplanestate'
-import WqState  from '../controller/wcbz/wqState'
+import WqState  from '../controller/wcbz/wqstate'
 
 const router = express.Router();
 
