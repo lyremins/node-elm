@@ -37,7 +37,8 @@ class AirplaneDevice extends BaseComponent{
                 device_code: fields.device_code, // 有售器件编号
                 sm: fields.sm, // 当前寿命
                 zsm: fields.zsm, // 总寿命
-                ys:fields.ys // 余寿报警阈值
+                ys:fields.ys, // 余寿报警阈值
+                model: fields.model
             }
             console.log(newAirplaneDevice.airplaneDevice_id);
 			try{
@@ -140,7 +141,8 @@ class AirplaneDevice extends BaseComponent{
                 device_code,
                 sm,
                 zsm,
-                ys
+                ys,
+                model
 
             } = fields;
             console.log(fields);

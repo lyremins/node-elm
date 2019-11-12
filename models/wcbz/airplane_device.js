@@ -12,6 +12,7 @@ const AirplaneDeviceSchema = new Schema({
     sm: Number, // 当前寿命
     zsm: Number, // 总寿命
     ys: Number, // 余寿报警阈值
+    model:String
 
 
 })

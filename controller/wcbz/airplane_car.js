@@ -38,6 +38,7 @@ class AirplaneCar extends BaseComponent{
                 lc: fields.lc, // 有售器件编号
                 sm: fields.sm, // 有售器件编号
                 airplane_type: fields.airplane_type, // 有售器件编号
+                model: fields.model
 
 			}
 			try{
@@ -143,7 +144,8 @@ class AirplaneCar extends BaseComponent{
                 ys,
                 lc,
                 airplane_type,
-                car_type
+                car_type,
+                model
 
             } = fields;
             console.log(fields);

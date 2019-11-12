@@ -179,7 +179,7 @@ class Situation extends BaseComponent{
                                 code: ee.code,
                                 upDownNumber: ee.airUpOrDown,
                                 approachTime: ee.approachTime,
-                                name: 'A001-飞行计划'
+                                name: `${ee.code}-保障任务`
                             })
                         });
                     });
@@ -198,7 +198,7 @@ class Situation extends BaseComponent{
                                 code: elements.airName,
                                 upDownNumber: elements.upDownNumber,
                                 approachTime: elements.approachTime,
-                                name: 'A001-飞行计划',
+                                name: `${elements.airName}-飞行计划`,
                                 ammoData: elements.xd
                             })
                         }

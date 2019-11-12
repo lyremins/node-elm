@@ -13,6 +13,7 @@ const AirplaneCarSchema = new Schema({
     sm: String, // 寿命
     airplane_type: String, // 飞机类型
     car_type: String, // 车辆类型
+    model:String
 
 
 })
