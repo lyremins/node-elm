@@ -76,7 +76,7 @@ class Plan extends BaseComponent{
     }
     // 查询人员
 	async getPlan(req, res, next){
-		const {limit = 20, offset = 0} = req.query;
+		const {limit = 100, offset = 0} = req.query;
 		try{
             const users = await planModel.find({}, '-_id').limit(Number(limit)).skip(Number(offset));
 			res.send({
