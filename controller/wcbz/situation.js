@@ -632,7 +632,7 @@ class Situation extends BaseComponent{
             let newData = {}
             personnel.forEach(e2 => {
                 if (e1.code === e2.bindAir) {
-                    bindA.push(e2.user_name)
+                    bindA.push(e2)
                     // bindA.push(Object.assign({},e2.user_name));
                 }
             });
@@ -673,7 +673,7 @@ class Situation extends BaseComponent{
             let newData = {}
             personnel.forEach(e2 => {
                 if (e1.code === e2.bindAir) {
-                    bindA.push(e2.user_name)
+                    bindA.push(e2)
                     // bindA.push(Object.assign({},e2.user_name));
                 }
             });
@@ -696,7 +696,7 @@ class Situation extends BaseComponent{
             let newData = {}
             personnel.forEach(e2 => {
                 if (e1.code === e2.bindAir) {
-                    bindA.push(e2.user_name)
+                    bindA.push(e2)
                     // bindA.push(Object.assign({},e2.user_name));
                 }
             });

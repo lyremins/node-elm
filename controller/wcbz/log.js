@@ -60,7 +60,7 @@ class Log extends BaseComponent{
     }
     // 查询人员
 	async getLog(req, res, next){
-		const {limit = 20, offset = 0} = req.query;
+		const {limit = 2000, offset = 0} = req.query;
 		try{
 			const users = await logModel.find({}, '-_id').limit(Number(limit)).skip(Number(offset));
 			res.send({
