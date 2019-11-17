@@ -544,9 +544,13 @@ class Situation extends BaseComponent{
         // 当天保障计划飞机编号的数组
         let ensureArray = ensure[0].filed3.map(v => {
             if (v.content === '飞行计划保障') {
-                return {plan: v.car.map(vv => vv)}
-            } else {
-                return {other: v.car.map(vv => vv)}
+                return v.car.map(vv => vv)
+            }
+        });
+
+        let ensureArray2 = ensure[0].filed3.map(v => {
+            if (v.content != '飞行计划保障' && v.car) {
+                return v.car.map(vv => vv)
             }
         });
 
@@ -558,18 +562,39 @@ class Situation extends BaseComponent{
         const newAirArray = [].concat.apply([], ensureArray);
         console.log(newAirArray);
 
+        const newAirArray2 = [].concat.apply([], ensureArray2);
+        console.log(newAirArray2);
+
+        const newnewAiraa = newAirArray2.filter(item => {
+            return typeof(item) != "undefined";
+        })
+        const newnewAiraa222 = newAirArray.filter(item => {
+            return typeof(item) != "undefined";
+        })
+
+        let ensureArray4 = newnewAiraa.map(v => {
+            return {other: v => v}
+        });
+
         // 过滤当天飞机编号的有寿器件列表
         const notaskcCar = vehicle.filter(item=> {
             return ensureArray1.indexOf(item.code) === -1
         })
 
         newAirArray.push({
-            notask: notaskcCar
+            notask: notaskcCar,
+            other: [...newnewAiraa]
         })
+
+        const datass = {
+            plan: [...newnewAiraa222],
+            notask: notaskcCar,
+            other: [...newnewAiraa]
+        }
 
         res.send({
             status: 1,
-            data: newAirArray,
+            data: datass,
         })
 
     }
