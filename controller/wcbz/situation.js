@@ -625,7 +625,7 @@ class Situation extends BaseComponent{
 
         // 当天保障计划飞机编号的数组
         let ensureArray = ensure[0].filed3.map(v => {
-            if (v.airplane.length === 0 && v.plan.length !== 0) {
+            if (!v.airplane && v.plan) {
                 return planArray
             }
             return v.airplane.map(vv =>  vv.code)
