@@ -1,6 +1,8 @@
 'use strict';
 
 import chatModel from '../../models/wcbz/chat'
+import organizModel from '../../models/wcbz/organiz'
+import personnelModel from '../../models/wcbz/personnel'
 import BaseComponent from '../../prototype/baseComponent'
 import formidable from 'formidable'
 import dtime from 'time-formater'
@@ -13,7 +15,7 @@ class Chat extends BaseComponent{
 		this.getChatCount = this.getChatCount.bind(this);
 		this.getChatDetail = this.getChatDetail.bind(this);
 		this.deleteChat = this.deleteChat.bind(this);
-	}
+    }
 	//添加人员
 	async addChat(req, res, next){
         let chat_id;
@@ -159,7 +161,41 @@ class Chat extends BaseComponent{
 				message: '删除失败',
 			})
 		}
-	}
+    }
+    async getOranizToPerson(req, res, next) {
+        const organiz = await organizModel.find();
+        const personnel = await personnelModel.find();
+
+        const mapLists = {};
+
+        personnel.forEach(element => {
+            mapLists[element.row] || (mapLists[element.row] = []);
+            mapLists[element.row].push(element);
+        });
+
+        const getMenuName = (das) => {
+            for (var value of das) {
+                if (value.children) {
+                    getMenuName(value.children)
+                }
+                // console.log(value.label);
+                if (mapLists.hasOwnProperty(value.label)) {
+                    console.log(value.label);
+                    value.people = mapLists[value.label];
+                }
+            }
+        }
+
+        console.log(organiz[0].organizArray);
+        getMenuName(organiz[0].organizArray);
+        console.log(organiz[0].organizArray);
+
+
+        res.send({
+            status: 1,
+            data: organiz[0].organizArray,
+        })
+    }
 }
 
 export default new Chat()
