@@ -79,11 +79,13 @@ class Situation extends BaseComponent{
                                 });
                            });
                         }
-                        e.car.forEach(ee => {
-                            console.log(ee);
-                            car_enter[ee.name] || (car_enter[ee.name] = []);
-                            car_enter[ee.name].push(ee);
-                        });
+                        if (e.car) {
+                            e.car.forEach(ee => {
+                                console.log(ee);
+                                car_enter[ee.name] || (car_enter[ee.name] = []);
+                                car_enter[ee.name].push(ee);
+                            });
+                        }
                         if (e.airplane) {
                             e.airplane.forEach(ss => {
                                 ensure_task +=1;
