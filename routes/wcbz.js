@@ -44,6 +44,7 @@ router.post('/addChat', Chat.addChat);
 router.get('/getChat', Chat.getChatDetail);
 router.get('/getChatCount', Chat.getChatCount);
 router.get('/getChatDetail', Chat.getChat);
+router.get('/getOranizToPerson', Chat.getOranizToPerson);
 router.delete('/deleteChat/:chat_id', Chat.deleteChat);
 
 // 飞机管理
