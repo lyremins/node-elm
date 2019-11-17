@@ -5,7 +5,9 @@ import airplaneAmmoModel from '../../models/wcbz/airplane_ammo'
 import planModel from '../../models/wcbz/plan'
 import ensureModel from '../../models/wcbz/ensure'
 import vehicleModel from '../../models/wcbz/vehicle'
+import airplaneDeviceModel from '../../models/wcbz/airplane_device'
 import personnelModel from '../../models/wcbz/personnel'
+import WqStateModel from '../../models/wcbz/wqState'
 import BaseComponent from '../../prototype/baseComponent'
 import { SSL_OP_SSLEAY_080_CLIENT_DH_BUG } from 'constants';
 
@@ -319,6 +321,374 @@ class Situation extends BaseComponent{
 			})
 		}
     }
+    // 有寿器件态势
+    async getAirplaneToDevice(req, res, next) {
+
+        // 获取当当天日期
+        var day2 = new Date();
+        day2.setTime(day2.getTime());
+        let day = '';
+        day = parseInt(day2.getDate()) < 10 ? '0' + day2.getDate() : day2.getDate()
+        let dayTime = day2.getFullYear()+"-" + (day2.getMonth()+1) + "-" + day;
+
+        const plandate = { dateTime: dayTime };
+        const ensuredate = { filed2: dayTime };
+
+        // 查询当天飞行计划
+        const plan = await planModel.find(plandate);
+
+        // 当天飞行计划飞机编号的数组
+        let planArray = plan[0].airData.map(v => v.airName);
+
+        // 查询当天保障计划
+        const ensure = await ensureModel.find(ensuredate);
+
+        // 当天保障计划飞机编号的数组
+        let ensureArray = ensure[0].filed3.map(v => {
+            return v.airplane.map(vv =>  vv.code)
+        });
+
+        const newEnsureArray = [].concat.apply([], ensureArray);
+
+        // 飞机-有寿器件关联列表
+        let airplaneDevice = await airplaneDeviceModel.find();
+
+        // 过滤当天飞机编号的有寿器件列表
+        const planToDeivce = airplaneDevice.filter(item=> {
+            return planArray.indexOf(item.air_code) !== -1
+        })
+
+        // 过滤当天飞机编号的有寿器件列表
+        const ensureToDeivce = airplaneDevice.filter(item=> {
+            return newEnsureArray.indexOf(item.air_code) !== -1
+        })
+
+        const jh = [...planArray,...newEnsureArray];
+
+        // 过滤当天飞机编号的有寿器件列表
+        const normalToDeivce = airplaneDevice.filter(item=> {
+            return jh.indexOf(item.air_code) === -1
+        })
+
+        const dataArray = {
+            plan: planToDeivce,
+            ensure: ensureToDeivce,
+            normal: normalToDeivce
+        }
+
+        res.send({
+            status: 1,
+            data: dataArray,
+        })
+
+    }
+
+    // 弹药态势
+    async getAmmoToDevice(req, res, next) {
+
+        // 获取当当天日期
+        var day2 = new Date();
+        day2.setTime(day2.getTime());
+        let day = '';
+        day = parseInt(day2.getDate()) < 10 ? '0' + day2.getDate() : day2.getDate()
+        let dayTime = day2.getFullYear()+"-" + (day2.getMonth()+1) + "-" + day;
+
+        const plandate = { dateTime: dayTime };
+        const wqdate = { create_time: { $gt: dayTime } };
+
+        // 查询当天飞行计划
+        const plan = await planModel.find(plandate);
+
+        // 当天飞行计划飞机编号的数组
+        let planArray = plan[0].airData.map(v => {
+            return v.xd.map(vv => {
+                return {
+                    name: `${vv.air_code}_${vv.ammo_code}`,
+                    zsm:vv.zsm,
+                    fscs: 0,
+                    fssl: 0
+                }
+            })
+        });
+
+        const newPlanArray = [].concat.apply([], planArray);
+
+        const wq = await WqStateModel.find(wqdate);
+
+        const wqArray = [];
+
+        wq.forEach((element,index) => {
+            const ll = JSON.parse(element.airData.wq);
+            ll.forEach(e => {
+                wqArray.push ({
+                    air_name : element.name,
+                    fxcs: e.fxcs,
+                    fxsl: e.fxsl,
+                    name: e.name,
+                    newName: `${element.name}_${e.name}`
+                })
+            });
+        });
+
+        const newwqArray = [].concat.apply([], wqArray);
+        console.log(newwqArray);
+
+        newPlanArray.forEach(e1 => {
+            newwqArray.forEach(e2 => {
+                if (e1.name === e2.newName) {
+                    e1.fscs +=e2.fxcs
+                    e1.fssl +=e2.fxsl
+                }
+            });
+        });
+
+
+        res.send({
+            status: 1,
+            data: newPlanArray,
+        })
+
+    }
+
+    // 飞机态势
+    async getAirplaneSituation(req, res, next) {
+
+        // 获取当当天日期
+        var day2 = new Date();
+        day2.setTime(day2.getTime());
+        let day = '';
+        day = parseInt(day2.getDate()) < 10 ? '0' + day2.getDate() : day2.getDate()
+        let dayTime = day2.getFullYear()+"-" + (day2.getMonth()+1) + "-" + day;
+
+        const plandate = { dateTime: dayTime };
+        const ensuredate = { filed2: dayTime };
+
+        const airplane = await airplaneModel.find();
+
+        // 查询当天飞行计划
+        const plan = await planModel.find(plandate);
+
+        // 当天飞行计划飞机编号的数组
+        let planArray = plan[0].airData.map(v => v.airName);
+
+        // 过滤当天飞机编号的有寿器件列表
+        const planToS = airplane.filter(item=> {
+            return planArray.indexOf(item.code) !== -1
+        })
+
+        // 查询当天保障计划
+        const ensure = await ensureModel.find(ensuredate);
+
+
+
+        // 当天保障计划飞机编号的数组
+        let ensureArray = ensure[0].filed3.map(v => {
+            if (v.airplane.length === 0 && v.plan.length !== 0) {
+                return planArray
+            }
+            return v.airplane.map(vv =>  vv.code)
+        });
+
+        const newAirArray = [].concat.apply([], ensureArray);
+
+        // 过滤当天飞机编号的有寿器件列表
+        const ensureToS = airplane.filter(item=> {
+            return newAirArray.indexOf(item.code) !== -1
+        })
+
+        // 过滤当天飞机编号的有寿器件列表
+        const normalToDeivce = airplane.filter(item=> {
+            return newAirArray.indexOf(item.code) === -1
+        })
+
+        const dataArray = {
+            plan: planToS,
+            ensure: ensureToS,
+            normal: normalToDeivce
+        }
+
+
+        res.send({
+            status: 1,
+            data: dataArray,
+        })
+
+    }
+
+    // 车辆态势
+    async getCarSituation(req, res, next) {
+
+        // 获取当当天日期
+        var day2 = new Date();
+        day2.setTime(day2.getTime());
+        let day = '';
+        day = parseInt(day2.getDate()) < 10 ? '0' + day2.getDate() : day2.getDate()
+        let dayTime = day2.getFullYear()+"-" + (day2.getMonth()+1) + "-" + day;
+
+        const plandate = { dateTime: dayTime };
+        const ensuredate = { filed2: dayTime };
+
+        // 查询当天保障计划
+        const ensure = await ensureModel.find(ensuredate);
+
+        const vehicle = await vehicleModel.find();
+
+        // 当天保障计划飞机编号的数组
+        let ensureArray = ensure[0].filed3.map(v => {
+            if (v.content === '飞行计划保障') {
+                return {plan: v.car.map(vv => vv)}
+            } else {
+                return {other: v.car.map(vv => vv)}
+            }
+        });
+
+        // 当天保障计划飞机编号的数组
+        let ensureArray1 = ensure[0].filed3.map(v => {
+            return v.car.map(vv => vv.name)
+        });
+
+        const newAirArray = [].concat.apply([], ensureArray);
+        console.log(newAirArray);
+
+        // 过滤当天飞机编号的有寿器件列表
+        const notaskcCar = vehicle.filter(item=> {
+            return ensureArray1.indexOf(item.code) === -1
+        })
+
+        newAirArray.push({
+            notask: notaskcCar
+        })
+
+        res.send({
+            status: 1,
+            data: newAirArray,
+        })
+
+    }
+
+    // 人员态势
+    async getPersonSituation(req, res, next) {
+
+        // 获取当当天日期
+        var day2 = new Date();
+        day2.setTime(day2.getTime());
+        let day = '';
+        day = parseInt(day2.getDate()) < 10 ? '0' + day2.getDate() : day2.getDate()
+        let dayTime = day2.getFullYear()+"-" + (day2.getMonth()+1) + "-" + day;
+
+        const plandate = { dateTime: dayTime };
+        const ensuredate = { filed2: dayTime };
+
+        const airplane = await airplaneModel.find();
+        const personnel = await personnelModel.find();
+
+        // 查询当天飞行计划
+        const plan = await planModel.find(plandate);
+
+        // 当天飞行计划飞机编号的数组
+        let planArray = plan[0].airData.map(v => v.airName);
+
+        // 过滤当天飞机编号的有寿器件列表
+        let planToS = airplane.filter(item=> {
+            return planArray.indexOf(item.code) !== -1
+        })
+
+        const newA = [];
+        planToS.forEach((e1,index) => {
+            let bindA = [];
+            let newData = {}
+            personnel.forEach(e2 => {
+                if (e1.code === e2.bindAir) {
+                    bindA.push(e2.user_name)
+                    // bindA.push(Object.assign({},e2.user_name));
+                }
+            });
+            newData = {
+                name: e1.code,
+                bind: bindA
+            }
+            newA.push(newData);
+        });
+        console.log(newA);
+
+
+
+
+        // 查询当天保障计划
+        const ensure = await ensureModel.find(ensuredate);
+
+
+
+        // 当天保障计划飞机编号的数组
+        let ensureArray = ensure[0].filed3.map(v => {
+            if (v.airplane.length === 0 && v.plan.length !== 0) {
+                return planArray
+            }
+            return v.airplane.map(vv =>  vv.code)
+        });
+
+        const newAirArray = [].concat.apply([], ensureArray);
+
+        // 过滤当天飞机编号的有寿器件列表
+        const ensureToS = airplane.filter(item=> {
+            return newAirArray.indexOf(item.code) !== -1
+        })
+
+        const newB = [];
+        ensureToS.forEach((e1,index) => {
+            let bindA = [];
+            let newData = {}
+            personnel.forEach(e2 => {
+                if (e1.code === e2.bindAir) {
+                    bindA.push(e2.user_name)
+                    // bindA.push(Object.assign({},e2.user_name));
+                }
+            });
+            newData = {
+                name: e1.code,
+                bind: bindA
+            }
+            newB.push(newData);
+        });
+        console.log(newB);
+
+        // 过滤当天飞机编号的有寿器件列表
+        const normalToDeivce = airplane.filter(item=> {
+            return newAirArray.indexOf(item.code) === -1
+        })
+
+        const newC = [];
+        normalToDeivce.forEach((e1,index) => {
+            let bindA = [];
+            let newData = {}
+            personnel.forEach(e2 => {
+                if (e1.code === e2.bindAir) {
+                    bindA.push(e2.user_name)
+                    // bindA.push(Object.assign({},e2.user_name));
+                }
+            });
+            newData = {
+                name: e1.code,
+                bind: bindA
+            }
+            newC.push(newData);
+        });
+        console.log(newC);
+
+        const dataArray = {
+            plan: newA,
+            ensure: newB,
+            normal: newC
+        }
+
+
+        res.send({
+            status: 1,
+            data: dataArray,
+        })
+
+    }
+
 }
 
 export default new Situation()

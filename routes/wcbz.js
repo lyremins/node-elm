@@ -157,6 +157,11 @@ router.get('/getAirplaneCar/:AirplaneCar_id', AirplaneCar.getAirplaneCarDetail);
 router.delete('/deleteAirplaneCar/:AirplaneCar_id', AirplaneCar.deleteAirplaneCar);
 
 router.get('/getSituation', Situation.getSituation);
+router.get('/getAirplaneToDevice', Situation.getAirplaneToDevice);
+router.get('/getAmmoToDevice', Situation.getAmmoToDevice);
+router.get('/getAirplaneSituation', Situation.getAirplaneSituation);
+router.get('/getCarSituation', Situation.getCarSituation);
+router.get('/getPersonSituation', Situation.getPersonSituation);
 router.get('/getAirplaneToPlan', Situation.getAirplaneToPlan);
 router.get('/getCarToEnsure', Situation.getCarToEnsure);
 router.get('/getPlanToToday', Situation.getPlanToToday);
