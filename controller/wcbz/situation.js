@@ -84,14 +84,16 @@ class Situation extends BaseComponent{
                             car_enter[ee.name] || (car_enter[ee.name] = []);
                             car_enter[ee.name].push(ee);
                         });
-                        e.airplane.forEach(ss => {
-                            ensure_task +=1;
-                            console.log('sssssssss',ensure_task);
-                            if (e.content !== '飞行计划保障') {
-                                ensure_ccc.push(ss.code);
-                                ensure_eee.push(ss.code);
-                            }
-                        })
+                        if (e.airplane) {
+                            e.airplane.forEach(ss => {
+                                ensure_task +=1;
+                                console.log('sssssssss',ensure_task);
+                                if (e.content !== '飞行计划保障') {
+                                    ensure_ccc.push(ss.code);
+                                    ensure_eee.push(ss.code);
+                                }
+                            })
+                        }
                     });
                 }
              });
