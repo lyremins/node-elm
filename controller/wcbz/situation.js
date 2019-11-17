@@ -179,15 +179,17 @@ class Situation extends BaseComponent{
             ensure.forEach(element => {
                 if (this.toTimeStamp(element.filed2) >= this.toTimeStamp(dayTime)) {
                     element.filed3.forEach(e => {
-                        e.airplane.forEach(ee => {
-                            array.push({
-                                airplane_id: ee.airplane_id,
-                                code: ee.code,
-                                upDownNumber: ee.airUpOrDown,
-                                approachTime: ee.approachTime,
-                                name: `${ee.code}-保障任务`
-                            })
-                        });
+                        if (e.airplane) {
+                            e.airplane.forEach(ee => {
+                                array.push({
+                                    airplane_id: ee.airplane_id,
+                                    code: ee.code,
+                                    upDownNumber: ee.airUpOrDown,
+                                    approachTime: ee.approachTime,
+                                    name: `${ee.code}-保障任务`
+                                })
+                            });
+                        }
                     });
                 }
             });
@@ -694,6 +696,8 @@ class Situation extends BaseComponent{
         })
 
     }
+
+
 
 }
 
