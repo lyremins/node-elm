@@ -342,8 +342,8 @@ class Situation extends BaseComponent{
         const plandate = { dateTime: dayTime };
         const ensuredate = { filed2: dayTime };
 
-        let [planArray,airplaneDevice,planToDeivce,ensureArray,newEnsureArray,ensureToDeivce] = [
-            "","","","","",""
+        let [planArray,airplaneDevice,planToDeivce,ensureArray,newEnsureArray,ensureToDeivce,normalToDeivce] = [
+            "","","","","","",""
         ];
 
         // 查询当天飞行计划
@@ -389,7 +389,7 @@ class Situation extends BaseComponent{
 
         if (airplaneDevice) {
             // 过滤当天飞机编号的有寿器件列表
-            const normalToDeivce = airplaneDevice.filter(item=> {
+            normalToDeivce = airplaneDevice.filter(item=> {
                 return jh.indexOf(item.air_code) === -1
             })
         }
