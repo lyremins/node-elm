@@ -253,11 +253,13 @@ class Situation extends BaseComponent{
                 if (this.toTimeStamp(element.filed2) >= this.toTimeStamp(dayTime)) {
                     console.log(element);
                     element.filed3.forEach(e => {
-                        e.car.forEach(ee => {
-                            if(!carArray.includes(ee.name)){ // 如果bArr新数组包含当前循环item
-                                carArray.push(ee.name);
-                               }
-                        });
+                        if (e.car) {
+                            e.car.forEach(ee => {
+                                if(!carArray.includes(ee.name)){ // 如果bArr新数组包含当前循环item
+                                    carArray.push(ee.name);
+                                   }
+                            });
+                        }
                     });
                 }
              });
