@@ -340,36 +340,46 @@ class Situation extends BaseComponent{
         const plandate = { dateTime: dayTime };
         const ensuredate = { filed2: dayTime };
 
+        let [planArray,airplaneDevice,planToDeivce,ensureArray,newEnsureArray,ensureToDeivce] = [
+            "","","","","",""
+        ];
+
         // 查询当天飞行计划
         const plan = await planModel.find(plandate);
-
-        // 当天飞行计划飞机编号的数组
-        let planArray = plan[0].airData.map(v => v.airName);
+        console.log(plan.length);
 
         // 查询当天保障计划
         const ensure = await ensureModel.find(ensuredate);
 
-        // 当天保障计划飞机编号的数组
-        let ensureArray = ensure[0].filed3.map(v => {
-            if (v.airplane) {
-                return v.airplane.map(vv =>  vv.code)
-            }
-        });
+        if (plan.length) {
+            // 当天飞行计划飞机编号的数组
+            planArray = plan[0].airData.map(v => v.airName);
 
-        const newEnsureArray = [].concat.apply([], ensureArray);
+            // 飞机-有寿器件关联列表
+            airplaneDevice = await airplaneDeviceModel.find();
 
-        // 飞机-有寿器件关联列表
-        let airplaneDevice = await airplaneDeviceModel.find();
+            // 过滤当天飞机编号的有寿器件列表
+            planToDeivce = airplaneDevice.filter(item=> {
+                return planArray.indexOf(item.air_code) !== -1
+            })
+        }
 
-        // 过滤当天飞机编号的有寿器件列表
-        const planToDeivce = airplaneDevice.filter(item=> {
-            return planArray.indexOf(item.air_code) !== -1
-        })
+        if (ensure.length) {
+            // 当天保障计划飞机编号的数组
+            ensureArray = ensure[0].filed3.map(v => {
+                if (v.airplane) {
+                    return v.airplane.map(vv =>  vv.code)
+                }
+            });
+            newEnsureArray = [].concat.apply([], ensureArray);
 
-        // 过滤当天飞机编号的有寿器件列表
-        const ensureToDeivce = airplaneDevice.filter(item=> {
-            return newEnsureArray.indexOf(item.air_code) !== -1
-        })
+            // 过滤当天飞机编号的有寿器件列表
+            ensureToDeivce = airplaneDevice.filter(item=> {
+                return newEnsureArray.indexOf(item.air_code) !== -1
+            })
+        }
+
+        console.log(newEnsureArray);
 
         const jh = [...planArray,...newEnsureArray];
 
@@ -378,9 +388,11 @@ class Situation extends BaseComponent{
             return jh.indexOf(item.air_code) === -1
         })
 
+        console.log("222222", ensureToDeivce);
+
         const dataArray = {
-            plan: planToDeivce,
-            ensure: ensureToDeivce,
+            plan: planToDeivce || [],
+            ensure: ensureToDeivce || [],
             normal: normalToDeivce
         }
 
