@@ -1,6 +1,7 @@
 'use strict';
 
 import planModel from '../../models/wcbz/plan'
+import ensureModel from '../../models/wcbz/ensure'
 import airplaneModel from '../../models/wcbz/airplane'
 import personnelModel from '../../models/wcbz/personnel'
 import WqStateModel from '../../models/wcbz/wqState'
@@ -308,6 +309,7 @@ class Plan extends BaseComponent{
                 await WqStateModel.remove({'create_time' : {"$gte" : dayTime}});
 
             }
+            await ensureModel.remove({'filed2' :dayTime});
 			res.send({
 				status: 1,
 				success: '删除成功',
