@@ -385,17 +385,21 @@ class Situation extends BaseComponent{
 
         const jh = [...planArray,...newEnsureArray];
 
-        // 过滤当天飞机编号的有寿器件列表
-        const normalToDeivce = airplaneDevice.filter(item=> {
-            return jh.indexOf(item.air_code) === -1
-        })
+        console.log(airplaneDevice);
+
+        if (airplaneDevice) {
+            // 过滤当天飞机编号的有寿器件列表
+            const normalToDeivce = airplaneDevice.filter(item=> {
+                return jh.indexOf(item.air_code) === -1
+            })
+        }
 
         console.log("222222", ensureToDeivce);
 
         const dataArray = {
             plan: planToDeivce || [],
             ensure: ensureToDeivce || [],
-            normal: normalToDeivce
+            normal: normalToDeivce || []
         }
 
         res.send({
