@@ -59,7 +59,7 @@ class AirplaneAmmo extends BaseComponent{
     }
     // 查询人员
 	async getAirplaneAmmo(req, res, next){
-		const {limit = 20, offset = 0} = req.query;
+		const {limit = 200, offset = 0} = req.query;
 		try{
             const users = await airplaneAmmoModel.find({}, '-_id').limit(Number(limit)).skip(Number(offset));
             console.log(users);
