@@ -71,7 +71,7 @@ class Device extends BaseComponent{
     }
     // 查询人员
 	async getDevice(req, res, next){
-		const {limit = 20, offset = 0} = req.query;
+		const {limit = 200, offset = 0} = req.query;
 		try{
 			const users = await deviceModel.find({}, '-_id').limit(Number(limit)).skip(Number(offset));
 			res.send({
