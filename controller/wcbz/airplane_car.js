@@ -195,7 +195,7 @@ class AirplaneCar extends BaseComponent{
     // 删除人员
     async deleteAirplaneCar(req, res, next){
         console.log(req.params);
-		const airplaneCar_id = req.params.airplaneCar_id;
+		const airplaneCar_id = req.params.AirplaneCar_id;
 		if (!airplaneCar_id || !Number(airplaneCar_id)) {
 			console.log('airplaneCar_id参数错误');
 			res.send({

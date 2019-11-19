@@ -188,7 +188,7 @@ class AirplaneAmmo extends BaseComponent{
     // 删除人员
     async deleteAirplaneAmmo(req, res, next){
         console.log(req.params);
-		const airplaneAmmo_id = req.params.airplaneAmmo_id;
+		const airplaneAmmo_id = req.params.AirplaneAmmo_id;
 		if (!airplaneAmmo_id || !Number(airplaneAmmo_id)) {
 			console.log('airplaneAmmo_id参数错误');
 			res.send({
