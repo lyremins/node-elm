@@ -560,22 +560,22 @@ class Situation extends BaseComponent{
         const vehicle = await vehicleModel.find();
 
         // 当天保障计划飞机编号的数组
-        let ensureArray = ensure[0].filed3.map(v => {
+        let ensureArray = ensure.length ? ensure[0].filed3.map(v => {
             if (v.content === '飞行计划保障') {
                 return v.car.map(vv => vv)
             }
-        });
+        }) : [];
 
-        let ensureArray2 = ensure[0].filed3.map(v => {
+        let ensureArray2 = ensure.length ? ensure[0].filed3.map(v => {
             if (v.content != '飞行计划保障' && v.car) {
                 return v.car.map(vv => vv)
             }
-        });
+        }) : [];
 
         // 当天保障计划飞机编号的数组
-        let ensureArray1 = ensure[0].filed3.map(v => {
+        let ensureArray1 = ensure.length ? ensure[0].filed3.map(v => {
             return v.car.map(vv => vv.name)
-        });
+        }) : [];
 
         const newAirArray = [].concat.apply([], ensureArray);
         console.log(newAirArray);
@@ -589,10 +589,6 @@ class Situation extends BaseComponent{
         const newnewAiraa222 = newAirArray.filter(item => {
             return typeof(item) != "undefined";
         })
-
-        let ensureArray4 = newnewAiraa.map(v => {
-            return {other: v => v}
-        });
 
         // 过滤当天飞机编号的有寿器件列表
         const notaskcCar = vehicle.filter(item=> {
