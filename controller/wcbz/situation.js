@@ -426,7 +426,7 @@ class Situation extends BaseComponent{
         const plan = await planModel.find(plandate);
 
         // 当天飞行计划飞机编号的数组
-        let planArray = plan[0].airData.map(v => {
+        let planArray = plan.length ? plan[0].airData.map(v => {
             return v.xd.map(vv => {
                 return {
                     name: `${vv.air_code}_${vv.ammo_code}`,
@@ -435,7 +435,7 @@ class Situation extends BaseComponent{
                     fssl: 0
                 }
             })
-        });
+        }) : [];
 
         const newPlanArray = [].concat.apply([], planArray);
 
