@@ -100,7 +100,7 @@ class ammo extends BaseComponent{
     // 获取人员详情
 	async getammoDetail(req, res, next){
         console.log(req.params);
-		const ammo_id = req.params.Ammo_id;
+		const ammo_id = req.params.ammo_id;
 		if (!ammo_id || !Number(ammo_id)) {
 			console.log('获取ID错误');
 			res.send({
