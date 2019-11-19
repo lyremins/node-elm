@@ -47,6 +47,7 @@ class Vehicle extends BaseComponent{
                 vehicle_id, // 飞机ID
                 model: fields.model,       // 飞机型号
                 name: fields.name,
+                code: fields.code,
                 organiz: fields.organiz, // 单位
                 service: fields.service, // 服务机型
                 armyId: fields.armyId, // 部队编号
@@ -170,7 +171,8 @@ class Vehicle extends BaseComponent{
                 stageCourse,
                 repairNumber,
                 taskState,
-                enter
+                enter,
+                code
             } = fields;
             const create_time = dtime().format('YYYY-MM-DD HH:mm');
             fields.create_time = create_time;
