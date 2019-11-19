@@ -495,7 +495,7 @@ class Situation extends BaseComponent{
         const plan = await planModel.find(plandate);
 
         // 当天飞行计划飞机编号的数组
-        let planArray = plan[0].airData.map(v => v.airName);
+        let planArray = plan.length ? plan[0].airData.map(v => v.airName): [];
 
         // 过滤当天飞机编号的有寿器件列表
         const planToS = airplane.filter(item=> {
@@ -508,12 +508,12 @@ class Situation extends BaseComponent{
 
 
         // 当天保障计划飞机编号的数组
-        let ensureArray = ensure[0].filed3.map(v => {
+        let ensureArray = ensure ? ensure[0].filed3.map(v => {
             if (!v.airplane && v.plan) {
                 return planArray
             }
             return v.airplane.map(vv =>  vv.code)
-        });
+        }) : [];
 
         const newAirArray = [].concat.apply([], ensureArray);
 
