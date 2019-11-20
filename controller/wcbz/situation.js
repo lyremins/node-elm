@@ -495,8 +495,6 @@ class Situation extends BaseComponent{
         // 查询当天保障计划
         const ensure = await ensureModel.find(ensuredate);
 
-
-
         // 当天保障计划飞机编号的数组
         let ensureArray = ensure.length ? ensure[0].filed3.map(v => {
             if (!v.airplane && v.plan) {
@@ -512,9 +510,15 @@ class Situation extends BaseComponent{
             return newAirArray.indexOf(item.code) !== -1
         })
 
+        const jh = [...planToS,...ensureToS];
+
+        const newJ = jh.map(v => v.code);
+
+        console.log(newJ);
+
         // 过滤当天飞机编号的有寿器件列表
         const normalToDeivce = airplane.filter(item=> {
-            return newAirArray.indexOf(item.code) === -1
+            return newJ.indexOf(item.code) === -1
         })
 
         const dataArray = {
@@ -580,14 +584,21 @@ class Situation extends BaseComponent{
             return typeof(item) != "undefined";
         })
 
+        // newAirArray.push({
+        //     notask: notaskcCar,
+        //     other: [...newnewAiraa]
+        // })
+
+
+        const jh = [...newnewAiraa222,...newnewAiraa];
+
+        const newJ = jh.map(v => v.name);
+
+        console.log(newJ);
+
         // 过滤当天飞机编号的有寿器件列表
         const notaskcCar = vehicle.filter(item=> {
-            return ensureArray1.indexOf(item.code) === -1
-        })
-
-        newAirArray.push({
-            notask: notaskcCar,
-            other: [...newnewAiraa]
+            return newJ.indexOf(item.name) === -1
         })
 
         const datass = {
@@ -689,10 +700,21 @@ class Situation extends BaseComponent{
         });
         console.log(newB);
 
+        const jh = [...ensureToS,...planToS];
+
+        const newJ = jh.map(v => v.code);
+
+        console.log(newJ);
+
         // 过滤当天飞机编号的有寿器件列表
         const normalToDeivce = airplane.filter(item=> {
-            return newAirArray.indexOf(item.code) === -1
+            return newJ.indexOf(item.code) === -1
         })
+
+        // // 过滤当天飞机编号的有寿器件列表
+        // const normalToDeivce = airplane.filter(item=> {
+        //     return newAirArray.indexOf(item.code) === -1
+        // })
 
         const newC = [];
         normalToDeivce.forEach((e1,index) => {
