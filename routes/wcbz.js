@@ -166,6 +166,7 @@ router.get('/getPersonSituation', Situation.getPersonSituation);
 router.get('/getAirplaneToPlan', Situation.getAirplaneToPlan);
 router.get('/getCarToEnsure', Situation.getCarToEnsure);
 router.get('/getPlanToToday', Situation.getPlanToToday);
+router.get('/getPersonSituationToPlan', Situation.getPersonSituationToPlan);
 
 router.get('/getAirplaneState', Airplanestate.getAirplaneState);
 router.get('/getWqState', WqState.getWqState);

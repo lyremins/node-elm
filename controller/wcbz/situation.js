@@ -748,6 +748,80 @@ class Situation extends BaseComponent{
 
     }
 
+    // 根据飞行计划查询人员态势
+    async getPersonSituationToPlan(req, res, next) {
+        console.log(req.query.plan_id);
+
+
+        // 获取当当天日期
+        var day2 = new Date();
+        day2.setTime(day2.getTime());
+        let day = '';
+        day = parseInt(day2.getDate()) < 10 ? '0' + day2.getDate() : day2.getDate()
+        let dayTime = day2.getFullYear()+"-" + (day2.getMonth()+1) + "-" + day;
+
+        const plan_id = { plan_id: req.query.plan_id };
+        const ensuredate = { filed2: dayTime };
+
+        const airplane = await airplaneModel.find();
+        const personnel = await personnelModel.find();
+
+        // 查询当天飞行计划
+        const plan = await planModel.find(plan_id);
+
+        const plan_air = plan.length ? plan[0].airData.map(v => v.airName): [];
+        console.log(plan_air);
+
+        // 当天飞行计划飞机编号的数组
+        let planArray = plan.length ? plan[0].airData.map(v => v.airName) : [];
+
+        // 过滤当天飞机编号的有寿器件列表
+        const planToS = [];
+        const ensureToS = [];
+
+
+        const jh = [...ensureToS,...planToS];
+
+        const newJ = jh.map(v => v.code);
+
+        console.log(newJ);
+
+        // 过滤当天飞机编号的有寿器件列表
+        const normalToDeivce = airplane.filter(item=> {
+            console.log(plan_air.indexOf(item.code));
+            return plan_air.indexOf(item.code) != -1
+        })
+
+        const newC = [];
+        normalToDeivce.forEach((e1,index) => {
+            let bindA = [];
+            let newData = {}
+            personnel.forEach(e2 => {
+                if (e1.code === e2.bindAir) {
+                    bindA.push(e2)
+                    // bindA.push(Object.assign({},e2.user_name));
+                }
+            });
+            newData = {
+                name: e1.code,
+                bind: bindA
+            }
+            newC.push(newData);
+        });
+        console.log(newC);
+
+        const dataArray = {
+            normal: newC
+        }
+
+
+        res.send({
+            status: 1,
+            data: newC,
+        })
+
+    }
+
 
 
 }
