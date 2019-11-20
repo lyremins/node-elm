@@ -31,7 +31,8 @@ const idsSchema = new mongoose.Schema({
     chat_id: Number,
     log_id: Number,
     airplenState_id: Number,
-    wqState_id: Number
+    wqState_id: Number,
+    chatGroup_id: Number
 });
 
 const Ids = mongoose.model('Ids', idsSchema);
@@ -67,7 +68,8 @@ Ids.findOne((err, data) => {
             chat_id: 0,
             log_id: 0,
             Number: 0,
-            wqState_id: 0
+            wqState_id: 0,
+            chatGroup_id: 0
 		});
 		newIds.save();
 	}

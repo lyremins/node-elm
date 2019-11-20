@@ -25,6 +25,7 @@ import Situation from '../controller/wcbz/situation'
 import Log from '../controller/wcbz/log'
 import Airplanestate from '../controller/wcbz/airplanestate'
 import WqState  from '../controller/wcbz/wqstate'
+import groupchat from '../controller/wcbz/groupchat';
 
 const router = express.Router();
 
@@ -46,6 +47,9 @@ router.get('/getChatCount', Chat.getChatCount);
 router.get('/getChatDetail', Chat.getChat);
 router.get('/getOranizToPerson', Chat.getOranizToPerson);
 router.delete('/deleteChat/:chat_id', Chat.deleteChat);
+
+router.post('/addGroupChat', groupchat.addGroupChat);
+router.get('/getGroupChat', groupchat.getGroupChat);
 
 // 飞机管理
 router.post('/addAirplane', Airplane.addAirplane);
@@ -174,4 +178,5 @@ router.get('/getWqState', WqState.getWqState);
 // 日志
 router.post('/addLog', Log.addLog);
 router.get('/getLog', Log.getLog);
+
 export default router
