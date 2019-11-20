@@ -14,6 +14,7 @@ class User extends AddressComponent {
 		this.encryption = this.encryption.bind(this);
 		this.chanegPassword = this.chanegPassword.bind(this);
 		this.updateAvatar = this.updateAvatar.bind(this);
+		this.createUser = this.createUser.bind(this);
 	}
 	async login(req, res, next){
 		const form = new formidable.IncomingForm();
@@ -347,6 +348,22 @@ class User extends AddressComponent {
 				type: 'ERROR_GET_USER_CITY',
 				message: '获取用户分布城市数据失败'
 			})
+		})
+    }
+    async createUser(req, res, next){
+		const form = new formidable.IncomingForm();
+		form.parse(req, async (err, fields, files) => {
+            const {username, password} = fields;
+            console.log(password);
+            const newpassword = this.Md5(this.Md5(password).substr(2, 7) + this.Md5(password));
+
+            const user_id = await this.getId('user_id');
+            const newUser = {username, password: newpassword, user_id};
+            UserModel.create(newUser);
+            res.send({
+                status: 1,
+                success: '创建成功',
+            })
 		})
 	}
 }

@@ -23,6 +23,7 @@ router.post('/carts/checkout', Carts.checkout);
 router.get('/carts/:cart_id/remarks', Remark.getRemarks);
 router.post('/captchas', Captchas.getCaptchas);
 router.get('/user', User.getInfo);
+router.post('/createUser', User.createUser);
 router.get('/user/:user_id', User.getInfoById);
 router.get('/users/list', User.getUserList);
 router.get('/users/count', User.getUserCount);
