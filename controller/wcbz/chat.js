@@ -3,6 +3,7 @@
 import chatModel from '../../models/wcbz/chat'
 import organizModel from '../../models/wcbz/organiz'
 import personnelModel from '../../models/wcbz/personnel'
+import UserModel from '../../models/v2/user'
 import BaseComponent from '../../prototype/baseComponent'
 import formidable from 'formidable'
 import dtime from 'time-formater'
@@ -165,10 +166,24 @@ class Chat extends BaseComponent{
     async getOranizToPerson(req, res, next) {
         const organiz = await organizModel.find();
         const personnel = await personnelModel.find();
+        const user = await UserModel.find();
+
+        const newP = [];
+        personnel.forEach((element,index) => {
+            let data = {
+                person_id: element.person_id,
+                name: element.user_name,
+                row: element.row,
+                user_id: user[index] ? user[index].user_id : '',
+                username: user[index] ? user[index].username : ''
+            }
+            newP.push(data);
+        });
+        // console.log(personnel);
 
         const mapLists = {};
 
-        personnel.forEach(element => {
+        newP.forEach(element => {
             mapLists[element.row] || (mapLists[element.row] = []);
             mapLists[element.row].push(element);
         });
@@ -180,15 +195,12 @@ class Chat extends BaseComponent{
                 }
                 // console.log(value.label);
                 if (mapLists.hasOwnProperty(value.label)) {
-                    console.log(value.label);
                     value.people = mapLists[value.label];
                 }
             }
         }
 
-        console.log(organiz[0].organizArray);
         getMenuName(organiz[0].organizArray);
-        console.log(organiz[0].organizArray);
 
 
         res.send({
