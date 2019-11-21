@@ -642,7 +642,7 @@ class Situation extends BaseComponent{
 
         // 过滤当天飞机编号的有寿器件列表
         const notaskcCar = vehicle.filter(item=> {
-            return newJ.indexOf(item.name) != -1
+            return newJ.indexOf(item.name) === -1
         })
         const plancCar = vehicle.filter(item=> {
             console.log(item.name);
