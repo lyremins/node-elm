@@ -655,8 +655,8 @@ class Situation extends BaseComponent{
 
         const datass = {
             plan: plancCar,
-            notask: notaskcCar,
-            other: ensureCar
+            other: ensureCar,
+            notask: notaskcCar
         }
 
         res.send({
