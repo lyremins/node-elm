@@ -207,7 +207,7 @@ class Situation extends BaseComponent{
                                 upDownNumber: elements.upDownNumber,
                                 approachTime: elements.approachTime,
                                 name: `${elements.airName}-飞行计划`,
-                                ammoData: element.xd,
+                                ammoData: elements.xd ? elements.xd.filter ( item => {return item.isCheck}) : [],
                             })
                         }
                     });
@@ -656,7 +656,7 @@ class Situation extends BaseComponent{
         const datass = {
             plan: plancCar,
             other: ensureCar,
-            notask: notaskcCar
+            notask: notaskcCar,
         }
 
         res.send({
