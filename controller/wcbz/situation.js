@@ -556,34 +556,65 @@ class Situation extends BaseComponent{
 
         // 查询当天保障计划
         const ensure = await ensureModel.find(ensuredate);
+        // console.log(ensure);
 
         const vehicle = await vehicleModel.find();
 
         // 当天保障计划飞机编号的数组
-        let ensureArray = ensure.length ? ensure[0].filed3.map(v => {
-            if (v.content === '飞行计划保障' && v.car.length) {
-                return v.car.map(vv => vv)
-            }
-        }) : [];
+        // let ensureArray = ensure.length ? ensure.filed3.map(v => {
+        //     if (v.content === '飞行计划保障' && v.car.length) {
+        //         return v.car.map(vv => vv)
+        //     }
+        // }) : [];
+        let ensureArray = [];
+        ensure.length ? ensure.forEach(vv => {
+                ensureArray = vv.filed3.map(v => {
+                    if (v.content === '飞行计划保障' && v.car.length) {
+                        return v.car.map(vvv => vvv)
+                    }
+                })
+        }) : ensureArray = [];
 
-        let ensureArray2 = ensure.length ? ensure[0].filed3.map(v => {
-            if (v.content != '飞行计划保障' && v.car) {
-                return v.car.map(vv => vv)
-            }
-        }) : [];
+        // console.log(ensureArray);
+
+        let ensureArray2 = [];
+        ensure.length ? ensure.forEach(vv => {
+                vv.filed3.forEach(v => {
+                    if (v.content != '飞行计划保障' && v.car) {
+                        console.log(v)
+                        ensureArray2.push(v.car.map(vvv => vvv));
+                    }
+                })
+        }) : ensureArray2 = [];
+        // console.log(ensureArray2);
+
+        // let ensureArray2 = ensure.length ? ensure.filed3.map(v => {
+        //     if (v.content != '飞行计划保障' && v.car) {
+        //         return v.car.map(vv => vv)
+        //     }
+        // }) : [];
+
+        let ensureArray1 = ensure.length ? ensure.map(vv => {
+            const n = vv.filed3.map(v => {
+                if (v.car) {
+                    return v.car.map(vv => vv.name)
+                }
+             })
+             return n;
+         }) : []
 
         // 当天保障计划飞机编号的数组
-        let ensureArray1 = ensure.length ? ensure[0].filed3.map(v => {
-            if (v.car) {
-                return v.car.map(vv => vv.name)
-            }
-        }) : [];
+        // let ensureArray1 = ensure.length ? ensure.filed3.map(v => {
+        //     if (v.car) {
+        //         return v.car.map(vv => vv.name)
+        //     }
+        // }) : [];
 
         const newAirArray = [].concat.apply([], ensureArray);
-        console.log(newAirArray);
+        // console.log(newAirArray);
 
         const newAirArray2 = [].concat.apply([], ensureArray2);
-        console.log(newAirArray2);
+        // console.log(newAirArray2);
 
         const newnewAiraa = newAirArray2.filter(item => {
             return typeof(item) != "undefined";
@@ -591,6 +622,11 @@ class Situation extends BaseComponent{
         const newnewAiraa222 = newAirArray.filter(item => {
             return typeof(item) != "undefined";
         })
+
+        const newJss = newnewAiraa.map(v => v.name);
+        console.log(newJss);
+        const newJkkk = newnewAiraa222.map(v => v.name);
+        console.log(newJkkk);
 
         // newAirArray.push({
         //     notask: notaskcCar,
@@ -602,17 +638,25 @@ class Situation extends BaseComponent{
 
         const newJ = jh.map(v => v.name);
 
-        console.log(newJ);
+        // console.log(newJ);
 
         // 过滤当天飞机编号的有寿器件列表
         const notaskcCar = vehicle.filter(item=> {
-            return newJ.indexOf(item.name) === -1
+            return newJ.indexOf(item.name) != -1
+        })
+        const plancCar = vehicle.filter(item=> {
+            console.log(item.name);
+            return newJkkk.indexOf(item.name) != -1
+        })
+        console.log(plancCar);
+        const ensureCar = vehicle.filter(item=> {
+            return newJss.indexOf(item.name) != -1
         })
 
         const datass = {
-            plan: [...newnewAiraa222],
+            plan: plancCar,
             notask: notaskcCar,
-            other: [...newnewAiraa]
+            other: ensureCar
         }
 
         res.send({
