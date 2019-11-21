@@ -207,7 +207,7 @@ class Situation extends BaseComponent{
                                 upDownNumber: elements.upDownNumber,
                                 approachTime: elements.approachTime,
                                 name: `${elements.airName}-飞行计划`,
-                                ammoData: elements.xd
+                                ammoData: element.xd.filter ( item => {return item.isCheck}),
                             })
                         }
                     });
