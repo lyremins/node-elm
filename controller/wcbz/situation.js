@@ -561,7 +561,7 @@ class Situation extends BaseComponent{
 
         // 当天保障计划飞机编号的数组
         let ensureArray = ensure.length ? ensure[0].filed3.map(v => {
-            if (v.content === '飞行计划保障') {
+            if (v.content === '飞行计划保障' && v.car) {
                 return v.car.map(vv => vv)
             }
         }) : [];
@@ -756,7 +756,7 @@ class Situation extends BaseComponent{
 
     // 根据飞行计划查询人员态势
     async getPersonSituationToPlan(req, res, next) {
-        console.log(req.query.plan_id);
+    console.log(req.query.plan_id);
 
 
         // 获取当当天日期
@@ -776,7 +776,6 @@ class Situation extends BaseComponent{
         const plan = await planModel.find(plan_id);
 
         const plan_air = plan.length ? plan[0].airData.map(v => v.airName): [];
-        console.log(plan_air);
 
         // 当天飞行计划飞机编号的数组
         let planArray = plan.length ? plan[0].airData.map(v => v.airName) : [];
@@ -789,8 +788,6 @@ class Situation extends BaseComponent{
         const jh = [...ensureToS,...planToS];
 
         const newJ = jh.map(v => v.code);
-
-        console.log(newJ);
 
         // 过滤当天飞机编号的有寿器件列表
         const normalToDeivce = airplane.filter(item=> {
@@ -814,7 +811,6 @@ class Situation extends BaseComponent{
             }
             newC.push(newData);
         });
-        console.log(newC);
 
         const dataArray = {
             normal: newC
