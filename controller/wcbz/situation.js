@@ -418,11 +418,13 @@ class Situation extends BaseComponent{
         // 当天飞行计划飞机编号的数组
         let planArray = plan.length ? plan[0].airData.map(v => {
             return v.xd.map(vv => {
-                return {
-                    name: `${vv.air_code}_${vv.ammo_code}`,
-                    zsm:vv.zsm,
-                    fscs: 0,
-                    fssl: 0
+                if (vv.isCheck) {
+                    return {
+                        name: `${vv.air_code}_${vv.ammo_code}`,
+                        zsm:vv.number,
+                        fscs: 0,
+                        fssl: 0
+                    }
                 }
             })
         }) : [];
