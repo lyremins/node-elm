@@ -429,7 +429,11 @@ class Situation extends BaseComponent{
             })
         }) : [];
 
-        const newPlanArray = [].concat.apply([], planArray);
+        const newPlanArray1 = [].concat.apply([], planArray);
+
+        const newPlanArray = newPlanArray1.filter(item => {
+            return typeof(item) != "undefined";
+        })
 
         const wq = await WqStateModel.find(wqdate);
 
