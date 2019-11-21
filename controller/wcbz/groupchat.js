@@ -69,6 +69,34 @@ class groupChat extends BaseComponent{
 			})
 		}
     }
+    // 删除群组
+	async deleteGroupChat(req, res, next){
+        console.log(req.query);
+		const chatGroup_id = req.params.chatGroup_id;
+		if (!chatGroup_id || !Number(chatGroup_id)) {
+			console.log('chatGroup_id参数错误');
+			res.send({
+				status: 0,
+				type: 'ERROR_PARAMS',
+				message: 'chatGroup_id参数错误',
+			})
+			return
+		}
+		try{
+			await groupChatModel.findOneAndRemove({chatGroup_id});
+			res.send({
+				status: 1,
+				success: '删除成功',
+			})
+		}catch(err){
+			console.log('删除失败', err);
+			res.send({
+				status: 0,
+				type: 'DELETE_RESTURANT_FAILED',
+				message: '删除失败',
+			})
+		}
+    }
 }
 
 export default new groupChat()

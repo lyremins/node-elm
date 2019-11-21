@@ -206,15 +206,17 @@ class Ensure extends BaseComponent{
                     }
                 }
                 for (const iterator of plan.filed3) {
-                    for (const ii of iterator.airplane) {
-                        console.log(ii.airplane_id)
-                        const data = {
-                            enter: '未进场'
+                    if (iterator.airplane) {
+                        for (const ii of iterator.airplane) {
+                            console.log(ii.airplane_id)
+                            const data = {
+                                enter: '未进场'
+                            }
+                            let airplane_id = {
+                                airplane_id: ii.vehicle_id
+                            };
+                            const res = await airplaneModel.findOneAndUpdate(airplane_id, {$set: data});
                         }
-                        let airplane_id = {
-                            airplane_id: ii.vehicle_id
-                        };
-                        const res = await airplaneModel.findOneAndUpdate(airplane_id, {$set: data});
                     }
                 }
             }

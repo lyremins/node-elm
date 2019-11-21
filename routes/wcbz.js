@@ -50,6 +50,7 @@ router.delete('/deleteChat/:chat_id', Chat.deleteChat);
 
 router.post('/addGroupChat', groupchat.addGroupChat);
 router.get('/getGroupChat', groupchat.getGroupChat);
+router.delete('/deleteGroupChat/:chatGroup_id', groupchat.deleteGroupChat);
 
 // 飞机管理
 router.post('/addAirplane', Airplane.addAirplane);
