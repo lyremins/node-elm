@@ -510,12 +510,22 @@ class Situation extends BaseComponent{
         const ensure = await ensureModel.find(ensuredate);
 
         // 当天保障计划飞机编号的数组
-        let ensureArray = ensure.length ? ensure[0].filed3.map(v => {
-            if (!v.airplane && v.plan) {
-                return planArray
-            }
-            return v.airplane.map(vv =>  vv.code)
-        }) : [];
+        // let ensureArray = ensure.length ? ensure[0].filed3.map(v => {
+        //     if (!v.airplane && v.plan) {
+        //         return planArray
+        //     }
+        //     return v.airplane.map(vv =>  vv.code)
+        // }) : [];
+
+        let ensureArray = [];
+        ensure.length ? ensure.forEach(vv => {
+            ensureArray = vv.filed3.map(v => {
+                if (!v.airplane && v.plan) {
+                    return planArray
+                }
+                return v.airplane.map(vv =>  vv.code)
+            })
+        }) : ensureArray = [];
 
         const newAirArray = [].concat.apply([], ensureArray);
 
