@@ -361,11 +361,19 @@ class Situation extends BaseComponent{
         })
 
         // 当天保障计划飞机编号的数组
-        const ensureArray = ensure.length ? ensure[0].filed3.map(v => {
-            if (v.airplane) {
-                return v.airplane.map(vv =>  vv.code)
-            }
-        }) : [];
+        // const ensureArray = ensure.length ? ensure[0].filed3.map(v => {
+        //     if (v.airplane) {
+        //         return v.airplane.map(vv =>  vv.code)
+        //     }
+        // }) : [];
+        let ensureArray = [];
+        ensure.length ? ensure.forEach(vv => {
+            ensureArray = vv.filed3.map(v => {
+                if (v.airplane) {
+                    return v.airplane.map(vv =>  vv.code)
+                }
+            })
+        }) : ensureArray = [];
         const newEnsureArray = [].concat.apply([], ensureArray);
 
         // 过滤当天飞机编号的有寿器件列表

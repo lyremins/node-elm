@@ -339,7 +339,6 @@ class Airplane extends BaseComponent{
         console.log(req.query);
 		const airplane_id = req.params.airplane_id;
 		if (!airplane_id || !Number(airplane_id)) {
-
 			console.log('airplane_id参数错误');
 			res.send({
 				status: 0,
@@ -377,7 +376,7 @@ class Airplane extends BaseComponent{
             console.log(parseInt(ammo.zsm));
             if (device) {
                 const devicesm = {
-                    sm: parseInt(device.zsm) - parseInt(data.airHour)
+                    sm: parseInt(device.sm) - parseInt(data.airHour)
                 }
                 const res = await airplaneDeviceModel.updateMany({air_code: airplane.code}, {$set: devicesm});
             }
