@@ -584,14 +584,25 @@ class Situation extends BaseComponent{
         //         return v.car.map(vv => vv)
         //     }
         // }) : [];
+
         let ensureArray = [];
         ensure.length ? ensure.forEach(vv => {
-                ensureArray = vv.filed3.map(v => {
-                    if (v.content === '飞行计划保障' && v.car.length) {
-                        return v.car.map(vvv => vvv)
+                vv.filed3.forEach(v => {
+                    if (v.content === '飞行计划保障' && v.car) {
+                        console.log(v)
+                        ensureArray.push(v.car.map(vvv => vvv));
                     }
                 })
         }) : ensureArray = [];
+
+        // let ensureArray = [];
+        // ensure.length ? ensure.forEach(vv => {
+        //         ensureArray = vv.filed3.map(v => {
+        //             if (v.content === '飞行计划保障' && v.car.length) {
+        //                 return v.car.map(vvv => vvv)
+        //             }
+        //         })
+        // }) : ensureArray = [];
 
         // console.log(ensureArray);
 
