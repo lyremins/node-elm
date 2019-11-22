@@ -521,7 +521,8 @@ class Situation extends BaseComponent{
         ensure.length ? ensure.forEach(vv => {
                 vv.filed3.forEach(v => {
                     if (!v.airplane && v.plan) {
-                        return planArray
+                        ensureArray.push(planArray);
+                        return ;
                     }
                     ensureArray.push(v.airplane.map(vvv =>  vvv.code));
                 })
