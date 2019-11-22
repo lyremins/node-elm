@@ -126,6 +126,7 @@ class ammo extends BaseComponent{
     // 更新人员
     async updateammo(req, res, next){
         const form = new formidable.IncomingForm();
+        console.log("22222222", form);
 		form.parse(req, async (err, fields, files) => {
 			if (err) {
 				console.log('获取信息form出错', err);
@@ -170,7 +171,7 @@ class ammo extends BaseComponent{
 			return
 		}
 		try{
-            const ddd = await ammoModel.findOneAndRemove(ammo_id);
+            const ddd = await ammoModel.findOneAndRemove({ammo_id});
             console.log(ddd);
 			res.send({
 				status: 1,
