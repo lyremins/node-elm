@@ -519,12 +519,12 @@ class Situation extends BaseComponent{
 
         let ensureArray = [];
         ensure.length ? ensure.forEach(vv => {
-            ensureArray = vv.filed3.map(v => {
-                if (!v.airplane && v.plan) {
-                    return planArray
-                }
-                return v.airplane.map(vv =>  vv.code)
-            })
+                vv.filed3.forEach(v => {
+                    if (!v.airplane && v.plan) {
+                        return planArray
+                    }
+                    ensureArray.push(v.airplane.map(vvv =>  vvv.code));
+                })
         }) : ensureArray = [];
 
         const newAirArray = [].concat.apply([], ensureArray);
